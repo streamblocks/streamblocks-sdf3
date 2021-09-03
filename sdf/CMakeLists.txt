@@ -2,6 +2,7 @@ include_directories(${CMAKE_SOURCE_DIR})
 
 add_subdirectory(base)
 add_subdirectory(analysis)
+add_subdirectory(generate)
 
 add_library(sdf3-sdf)
 target_link_libraries(sdf3-sdf PUBLIC
@@ -17,4 +18,6 @@ target_link_libraries(sdf3-sdf PUBLIC
         sdf_analysis_maxplus
         sdf_analysis_mcm
         sdf_analysis_token_communication
+
+        sdf_generate
         )
