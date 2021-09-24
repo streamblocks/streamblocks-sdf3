@@ -1,5 +1,5 @@
 set(sdf_generate_sources
-        generate.cc
+       generate.cc
         )
 
 set(sdf_generate_headers
