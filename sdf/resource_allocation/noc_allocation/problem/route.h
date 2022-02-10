@@ -95,7 +95,7 @@ namespace SDF
             {
                 return cost;
             };
-            bool operator<(const Route &r)
+            bool operator<(const Route &r) const
             {
                 return getCost() < r.getCost() ? true : false;
             };

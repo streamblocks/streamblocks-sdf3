@@ -80,9 +80,9 @@ typedef double                  CDouble;
 /* Queue */
 typedef queue<CId>              CQueue;
 
-#ifdef _MSC_VER
+
 typedef unsigned long           ulong;
-#endif
+
 
 #define CID_MAX                 UINT_MAX
 
