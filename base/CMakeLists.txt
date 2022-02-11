@@ -1,5 +1,4 @@
 
-
 include_directories(${CMAKE_SOURCE_DIR})
 
 add_subdirectory(exception)
@@ -18,7 +17,6 @@ add_subdirectory(sort)
 add_subdirectory(tempfile)
 add_subdirectory(time)
 add_subdirectory(xml)
-
 
 
 add_library(sdf3-base STATIC)

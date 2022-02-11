@@ -66,16 +66,16 @@ class CException
             message(e.getMessage()), cause(e.getCause()) {}
 
         // Destructor
-        virtual ~CException() {};
+        virtual ~CException() = default;;
 
         // Message
-        const CString getMessage() const
+        CString getMessage() const
         {
             return message;
         }
 
         // Cause
-        const CString getCause() const
+        CString getCause() const
         {
             return cause;
         }

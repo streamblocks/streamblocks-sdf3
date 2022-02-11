@@ -299,10 +299,10 @@ class CFraction
         };
 
     private:
-        bool fraction;
-        double val;
-        long long int num;
-        long long int den;
+        bool fraction{};
+        double val{};
+        long long int num{};
+        long long int den{};
 };
 
 typedef vector<CFraction>           CFractions;
