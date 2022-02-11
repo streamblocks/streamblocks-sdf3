@@ -1,4 +1,5 @@
 set(sdf_resource_allocation_flow_sources
+        constraint.cc
         flow.cc
         memory.cc
         noc.cc

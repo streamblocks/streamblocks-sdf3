@@ -9,4 +9,5 @@ set(base_xml_headers
         )
 
 add_library(base_xml OBJECT ${base_xml_sources} ${base_xml_headers})
+target_link_libraries(base_xml ${LIBXML2_LIBRARIES})
 target_compile_definitions(base_xml PUBLIC)

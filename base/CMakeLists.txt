@@ -21,7 +21,7 @@ add_subdirectory(xml)
 
 
 
-add_library(sdf3-base)
+add_library(sdf3-base STATIC)
 target_link_libraries(sdf3-base PUBLIC
         base_exception
         base_fraction

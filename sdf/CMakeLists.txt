@@ -5,9 +5,10 @@ add_subdirectory(analysis)
 add_subdirectory(generate)
 add_subdirectory(transform)
 add_subdirectory(resource_allocation)
+add_subdirectory(tools)
 add_subdirectory(output)
 
-add_library(sdf3-sdf)
+add_library(sdf3-sdf STATIC)
 target_link_libraries(sdf3-sdf PUBLIC
         sdf_base_algo
         sdf_base_hsdf
@@ -45,3 +46,6 @@ target_link_libraries(sdf3-sdf PUBLIC
         sdf_output_schedule
         sdf_output_xml
         )
+
+set_target_properties(sdf3-sdf PROPERTIES
+        FRAMEWORK TRUE)

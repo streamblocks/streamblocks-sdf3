@@ -2,7 +2,7 @@ set(sdf_analysis_buffersizing_sources
         bounded_buffer.cc
         buffer.cc
         buffer_capacity_constrained.cc
-        buffer_ning_gao.h
+        buffer_ning_gao.cc
         )
 
 set(sdf_analysis_buffersizing_headers

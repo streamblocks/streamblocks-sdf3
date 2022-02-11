@@ -5,7 +5,7 @@ set(sdf_resource_allocation_noc_allocation_problem_sources
         problem.cc
         route.cc
         schedulingentity.cc
-        slot.h
+        slot.cc
         )
 
 set(sdf_resource_allocation_noc_allocation_problem_headers
@@ -17,6 +17,7 @@ set(sdf_resource_allocation_noc_allocation_problem_headers
         route.h
         schedulingentity.h
         slot.h
+        packet.h
         )
 
 add_library(sdf_resource_allocation_noc_allocation_problem OBJECT ${sdf_resource_allocation_noc_allocation_problem_sources} ${sdf_resource_allocation_noc_allocation_problem_headers})
