@@ -2,16 +2,15 @@
 <sdf3 type="sdf" version="1.0">
     <settings type="generate">
         <graph>
-            <actors nr="100"/>
-            <degree avg="1" var="1" min="1" max="2" repetitionVectorSum="30"/>
-            <rate avg="1" var="1" min="1" max="1"/>
+            <actors nr="10"/>
+            <degree avg="3" var="1" min="2" max="4" repetitionVectorSum="30"/>
+            <rate avg="3" var="1" min="1" max="5"/>
             <initialTokens prop="0"/>
             <structure stronglyConnected="false" acyclic="true" />
         </graph>
         <graphProperties>
-            <procs nrTypes="3" mapChance=".1"/>
-            <execTime avg="15" var="3" min="1" max="30"/>
-            <stateSize avg="74" var="19" min="1" max="150"/>
+            <procs nrTypes="1" mapChance=".1"/>
+            <execTime avg="1" var="1" min="1" max="1"/>
             <tokenSize avg="10" var="23" min="1" max="30"/>
             <bufferSize/>
             <bandwidthRequirement avg="4" var="2" min="0" max="7"/>

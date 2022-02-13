@@ -1,4 +1,6 @@
-include_directories(${CMAKE_SOURCE_DIR})
+find_package(LibXml2 REQUIRED)
+
+include_directories(${CMAKE_SOURCE_DIR} ${LIBXML2_INCLUDE_DIR})
 
 add_subdirectory(base)
 add_subdirectory(analysis)
