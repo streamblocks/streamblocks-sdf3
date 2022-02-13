@@ -49,23 +49,23 @@ namespace SDF
      * initBoundsSearchSpace ()
      * Compute bounds on the trade-off space that must be explored.
      */
-    void SDFstateSpaceBufferAnalysis::initBoundsSearchSpace(TimedSDFgraph *g)
+    void SDFstateSpaceBufferAnalysis::initBoundsSearchSpace(TimedSDFgraph *graph)
     {
-        initMinimalChannelSzStep(g);
-        initMinimalChannelSz(g);
-        initLbDistributionSz(g);
-        initMaxThroughput(g);
+        initMinimalChannelSzStep(graph);
+        initMinimalChannelSz(graph);
+        initLbDistributionSz(graph);
+        initMaxThroughput(graph);
     }
 
     /**
      * initMinimalChannelSzStep ()
      * Compute lower bound on the step size of channels
      */
-    void SDFstateSpaceBufferAnalysis::initMinimalChannelSzStep(TimedSDFgraph *g)
+    void SDFstateSpaceBufferAnalysis::initMinimalChannelSzStep(TimedSDFgraph *graph)
     {
-        minSzStep = new TBufSize [g->nrChannels()];
+        minSzStep = new TBufSize [graph->nrChannels()];
 
-        for (SDFchannelsIter iter = g->channelsBegin(); iter != g->channelsEnd();
+        for (auto iter = graph->channelsBegin(); iter != graph->channelsEnd();
              iter++)
         {
             SDFchannel *ch = *iter;
@@ -85,11 +85,11 @@ namespace SDF
      * initMinimalChannelSz ()
      * Compute lower bound on the buffer size needed for positive throughput
      */
-    void SDFstateSpaceBufferAnalysis::initMinimalChannelSz(TimedSDFgraph *g)
+    void SDFstateSpaceBufferAnalysis::initMinimalChannelSz(TimedSDFgraph *graph)
     {
-        minSz =  new TBufSize [g->nrChannels()];
+        minSz =  new TBufSize [graph->nrChannels()];
 
-        for (SDFchannelsIter iter = g->channelsBegin(); iter != g->channelsEnd();
+        for (auto iter = graph->channelsBegin(); iter != graph->channelsEnd();
              iter++)
         {
             SDFchannel *ch = *iter;
@@ -116,11 +116,11 @@ namespace SDF
      * initLbDistributionSz ()
      * Compute lower bound on the buffer size needed for positive throughput
      */
-    void SDFstateSpaceBufferAnalysis::initLbDistributionSz(TimedSDFgraph *g)
+    void SDFstateSpaceBufferAnalysis::initLbDistributionSz(TimedSDFgraph *graph)
     {
         lbDistributionSz = 0;
 
-        for (uint c = 0; c < g->nrChannels(); c++)
+        for (uint c = 0; c < graph->nrChannels(); c++)
             lbDistributionSz += minSz[c];
     }
 
@@ -128,11 +128,11 @@ namespace SDF
      * initMaxThroughput ()
      * Compute the maximal throughput that can be achieved by the graph.
      */
-    void SDFstateSpaceBufferAnalysis::initMaxThroughput(TimedSDFgraph *g)
+    void SDFstateSpaceBufferAnalysis::initMaxThroughput(TimedSDFgraph *graph)
     {
         SDFstateSpaceThroughputAnalysis thrAnalysisAlgo;
 
-        maxThroughput = thrAnalysisAlgo.analyze(g);
+        maxThroughput = thrAnalysisAlgo.analyze(graph);
     }
 
     /******************************************************************************
@@ -180,9 +180,9 @@ namespace SDF
      */
     void SDFstateSpaceBufferAnalysis::TransitionSystem::State::clear()
     {
-        for (uint i = 0; i < actClk.size(); i++)
+        for (auto & i : actClk)
         {
-            actClk[i].clear();
+            i.clear();
         }
 
         for (uint i = 0; i < ch.size(); i++)
@@ -232,13 +232,13 @@ namespace SDF
     {
         RepetitionVector repVec;
         int min = INT_MAX;
-        SDFactor *a = NULL;
+        SDFactor *a = nullptr;
 
         // Compute repetition vector
         repVec = computeRepetitionVector(g);
 
         // Select actor with lowest entry in repetition vector as output actor
-        for (SDFactorsIter iter = g->actorsBegin(); iter != g->actorsEnd(); iter++)
+        for (auto iter = g->actorsBegin(); iter != g->actorsEnd(); iter++)
         {
             if (repVec[(*iter)->getId()] < min)
             {
@@ -264,7 +264,7 @@ namespace SDF
             StatesIter &pos)
     {
         // Find state in the list of stored states
-        for (StatesIter iter = storedStates.begin();
+        for (auto iter = storedStates.begin();
              iter != storedStates.end(); iter++)
         {
             State &x = *iter;
@@ -347,7 +347,7 @@ namespace SDF
                     {
                         // All channels from d to c in the SDFG have
                         // storage dependency
-                        for (SDFchannelsIter iter = g->channelsBegin();
+                        for (auto iter = g->channelsBegin();
                              iter != g->channelsEnd(); iter++)
                         {
                             SDFchannel *ch = *iter;
@@ -424,15 +424,15 @@ namespace SDF
 
 #define CH(c)               currentState.ch[c]
 #define SP(c)               currentState.sp[c]
-#define CH_TOKENS(c,n)      (CH(c) >= n)
-#define CH_SPACE(c,n)       (SP(c) >= n)
-#define CONSUME(c,n)        CH(c) = CH(c) - n;
-#define PRODUCE(c,n)        CH(c) = CH(c) + n;
-#define CONSUME_SP(c,n)     SP(c) = SP(c) - n;
-#define PRODUCE_SP(c,n)     SP(c) = SP(c) + n;
+#define CH_TOKENS(c,n)      (CH(c) >= (n))
+#define CH_SPACE(c,n)       (SP(c) >= (n))
+#define CONSUME(c,n)        CH(c) = CH(c) - (n);
+#define PRODUCE(c,n)        CH(c) = CH(c) + (n);
+#define CONSUME_SP(c,n)     SP(c) = SP(c) - (n);
+#define PRODUCE_SP(c,n)     SP(c) = SP(c) + (n);
 
-#define CH_TOKENS_PREV(c,n) (previousState.ch[c] >= n)
-#define CH_SPACE_PREV(c,n)  (previousState.sp[c] >= n)
+#define CH_TOKENS_PREV(c,n) (previousState.ch[c] >= (n))
+#define CH_SPACE_PREV(c,n)  (previousState.sp[c] >= (n))
 
     /**
      * actorReadyToFire ()
@@ -443,7 +443,7 @@ namespace SDF
         SDFactor *a)
     {
         // Check all input ports for tokens
-        for (SDFportsIter iter = a->portsBegin(); iter != a->portsEnd(); iter++)
+        for (auto iter = a->portsBegin(); iter != a->portsEnd(); iter++)
         {
             SDFport *p = *iter;
             SDFchannel *c = p->getChannel();
@@ -478,7 +478,7 @@ namespace SDF
         TimedSDFactor *a)
     {
         // Consume tokens from inputs and space for output tokens
-        for (SDFportsIter iter = a->portsBegin(); iter != a->portsEnd(); iter++)
+        for (auto iter = a->portsBegin(); iter != a->portsEnd(); iter++)
         {
             SDFport *p = *iter;
             SDFchannel *c = p->getChannel();
@@ -522,7 +522,7 @@ namespace SDF
      */
     void SDFstateSpaceBufferAnalysis::TransitionSystem::endActorFiring(SDFactor *a)
     {
-        for (SDFportsIter iter = a->portsBegin(); iter != a->portsEnd(); iter++)
+        for (auto iter = a->portsBegin(); iter != a->portsEnd(); iter++)
         {
             SDFport *p = *iter;
             SDFchannel *c = p->getChannel();
@@ -575,11 +575,8 @@ namespace SDF
         // Lower remaining execution time actors
         for (uint a = 0; a < g->nrActors(); a++)
         {
-            for (list<SDFtime>::iterator iter = currentState.actClk[a].begin();
-                 iter != currentState.actClk[a].end(); iter++)
+            for (unsigned int & actFiringTime : currentState.actClk[a])
             {
-                SDFtime &actFiringTime = *iter;
-
                 // Lower remaining execution time of the actor firing
                 actFiringTime -= step;
             }
@@ -601,7 +598,7 @@ namespace SDF
         SDFactor *a, bool **abstractDepGraph)
     {
         // Check all input ports for tokens and output ports for space
-        for (SDFportsIter iter = a->portsBegin(); iter != a->portsEnd(); iter++)
+        for (auto iter = a->portsBegin(); iter != a->portsEnd(); iter++)
         {
             SDFport *p = *iter;
             SDFchannel *c = p->getChannel();
@@ -661,7 +658,7 @@ namespace SDF
         repCnt = -1;
 
         // Complete the remaining actor firings
-        for (SDFactorsIter iter = g->actorsBegin(); iter != g->actorsEnd(); iter++)
+        for (auto iter = g->actorsBegin(); iter != g->actorsEnd(); iter++)
         {
             SDFactor *a = *iter;
 
@@ -685,10 +682,10 @@ namespace SDF
         while (true)
         {
             // Start actor firings
-            for (SDFactorsIter iter = g->actorsBegin();
+            for (auto iter = g->actorsBegin();
                  iter != g->actorsEnd(); iter++)
             {
-                TimedSDFactor *a = (TimedSDFactor *)(*iter);
+                auto *a = (TimedSDFactor *)(*iter);
 
                 // Ready to fire actor a?
                 while (actorReadyToFire(a))
@@ -712,7 +709,7 @@ namespace SDF
             }
 
             // Finish actor firings
-            for (SDFactorsIter iter = g->actorsBegin();
+            for (auto iter = g->actorsBegin();
                  iter != g->actorsEnd(); iter++)
             {
                 SDFactor *a = *iter;
@@ -770,7 +767,7 @@ namespace SDF
         }
 
         // Check number of tokens on every channel in the graph
-        for (SDFchannelsIter iter = g->channelsBegin();
+        for (auto iter = g->channelsBegin();
              iter != g->channelsEnd(); iter++)
         {
             SDFchannel *c = *iter;
@@ -821,7 +818,7 @@ namespace SDF
         previousState.clear();
 
         // Initial tokens and space
-        for (SDFchannelsIter iter = g->channelsBegin();
+        for (auto iter = g->channelsBegin();
              iter != g->channelsEnd(); iter++)
         {
             SDFchannel *c = *iter;
@@ -848,7 +845,7 @@ namespace SDF
             }
 
             // Finish actor firings
-            for (SDFactorsIter iter = g->actorsBegin();
+            for (auto iter = g->actorsBegin();
                  iter != g->actorsEnd(); iter++)
             {
                 SDFactor *a = *iter;
@@ -879,10 +876,10 @@ namespace SDF
             }
 
             // Start actor firings
-            for (SDFactorsIter iter = g->actorsBegin();
+            for (auto iter = g->actorsBegin();
                  iter != g->actorsEnd(); iter++)
             {
-                TimedSDFactor *a = (TimedSDFactor *)(*iter);
+                auto *a = (TimedSDFactor *)(*iter);
 
                 // Ready to fire actor a?
                 while (actorReadyToFire(a))
@@ -972,12 +969,12 @@ namespace SDF
 
         // Maximal throughput with current distribution size equal to previous
         // throughput with previous (smaller) distribution size
-        if (ds->prev != NULL && ds->prev->thr == ds->thr)
+        if (ds->prev != nullptr && ds->prev->thr == ds->thr)
         {
             // No minimal storage distributions exist in this list
             // Iterate over the list of storage distributions
             d = ds->distributions;
-            while (d != NULL)
+            while (d != nullptr)
             {
                 // Temporary reference to next element in list
                 t = d->next;
@@ -990,24 +987,24 @@ namespace SDF
             }
 
             // No distributions left
-            ds->distributions = NULL;
+            ds->distributions = nullptr;
         }
         else
         {
             // Iterate over the list of storage distributions
             d = ds->distributions;
-            while (d != NULL)
+            while (d != nullptr)
             {
                 // Throughput of distribution smaller then maximum throughput with
                 // same distribution size?
                 if (d->thr < ds->thr)
                 {
                     // Remove d from linked list
-                    if (d->prev != NULL)
+                    if (d->prev != nullptr)
                         d->prev->next = d->next;
                     else
                         ds->distributions = d->next;
-                    if (d->next != NULL)
+                    if (d->next != nullptr)
                         d->next->prev = d->prev;
 
                     // Temporary reference to next element in list
@@ -1045,15 +1042,15 @@ namespace SDF
         bool equalDistr;
 
         // First distribution ever added?
-        if (minStorageDistributions == NULL)
+        if (minStorageDistributions == nullptr)
         {
             // Create new set of storage distributions
             dsNew = new StorageDistributionSet;
             dsNew->sz = d->sz;
             dsNew->thr = 0;
             dsNew->distributions = d;
-            dsNew->next = NULL;
-            dsNew->prev = NULL;
+            dsNew->next = nullptr;
+            dsNew->prev = nullptr;
 
             // Set is first in list to be checked
             minStorageDistributions = dsNew;
@@ -1064,12 +1061,12 @@ namespace SDF
 
         // Find set of distributions with the same size
         ds = minStorageDistributions;
-        while (ds->next != NULL && ds->next->sz <= d->sz)
+        while (ds->next != nullptr && ds->next->sz <= d->sz)
         {
             ds = ds->next;
         }
 
-        ASSERT(ds != NULL, "checkDistributions list cannnot be empty");
+        ASSERT(ds != nullptr, "checkDistributions list cannnot be empty");
 
         // Set of storage distribution with same size as d exists?
         if (ds->sz == d->sz)
@@ -1077,7 +1074,7 @@ namespace SDF
 
             // Check that distribution d does not exist in the set
             di = ds->distributions;
-            while (di != NULL)
+            while (di != nullptr)
             {
                 equalDistr = true;
 
@@ -1101,7 +1098,7 @@ namespace SDF
             d->next = ds->distributions;
             ds->distributions = d;
         }
-        else if (ds->next == NULL)
+        else if (ds->next == nullptr)
         {
             // No set of distribution in the list with same or larger size?
 
@@ -1110,7 +1107,7 @@ namespace SDF
             dsNew->sz = d->sz;
             dsNew->thr = 0;
             dsNew->distributions = d;
-            dsNew->next = NULL;
+            dsNew->next = nullptr;
             dsNew->prev = ds;
 
             // Add set to the list of sets
@@ -1182,8 +1179,8 @@ namespace SDF
                     if (i == c)
                         dNew->sp[i] += minSzStep[c];
                 }
-                dNew->next = NULL;
-                dNew->prev = NULL;
+                dNew->next = nullptr;
+                dNew->prev = nullptr;
 
                 // Add storage distribution to set of distributions to be checked
                 if (!addStorageDistributionToChecklist(dNew))
@@ -1207,7 +1204,7 @@ namespace SDF
 
         // Explore all storage distributions contained in the set
         d = ds->distributions;
-        while (d != NULL)
+        while (d != nullptr)
         {
             // Explore distribution d
             exploreStorageDistribution(ds, d);
@@ -1238,8 +1235,8 @@ namespace SDF
         d->sz = lbDistributionSz;
         for (uint c = 0; c < g->nrChannels(); c++)
             d->sp[c] = minSz[c];
-        d->next = NULL;
-        d->prev = NULL;
+        d->next = nullptr;
+        d->prev = nullptr;
 
         // Add distribution to set of distributions which must be checked
         addStorageDistributionToChecklist(d);
@@ -1247,7 +1244,7 @@ namespace SDF
         // Check sets of storage distributions till no distributions left to check,
         // or throughput bound exceeded, or maximal throughput reached
         ds = minStorageDistributions;
-        while (ds != NULL)
+        while (ds != nullptr)
         {
             // Explore all distributions with size 'ds->sz'
             exploreStorageDistributionSet(ds);
@@ -1275,14 +1272,14 @@ namespace SDF
             ds = ds->next;
 
             // No distributions left with the given distribution size?
-            if (dt->distributions == NULL)
+            if (dt->distributions == nullptr)
             {
                 // Remove distr from linked list
-                if (dt->prev != NULL)
+                if (dt->prev != nullptr)
                     dt->prev->next = dt->next;
                 else
                     minStorageDistributions = dt->next;
-                if (dt->next != NULL)
+                if (dt->next != nullptr)
                     dt->next->prev = dt->prev;
 
                 // Cleanup dt
@@ -1291,20 +1288,20 @@ namespace SDF
         }
 
         // Unexplored distributions left?
-        if (ds != NULL && ds->next != NULL)
+        if (ds != nullptr && ds->next != nullptr)
         {
             // Pointer to first set which must be removed
             ds = ds->next;
 
             // Mark previous set as last set in list of minimal storage distr
-            ds->prev->next = NULL;
+            ds->prev->next = nullptr;
 
             // Remove all unexplored distributions (and sets)
-            while (ds != NULL)
+            while (ds != nullptr)
             {
                 // Remove all distributions within the set ds
                 d = ds->distributions;
-                while (d != NULL)
+                while (d != nullptr)
                 {
                     t = d->next;
                     deleteStorageDistribution(d);
@@ -1348,7 +1345,7 @@ namespace SDF
         g = gr;
 
         // Start with an empty set of storage distributions
-        minStorageDistributions = NULL;
+        minStorageDistributions = nullptr;
 
         // Initialize bounds on the search space
         initBoundsSearchSpace(g);
@@ -1379,7 +1376,7 @@ namespace SDF
         g = gr;
 
         // Start with an empty set of storage distributions
-        minStorageDistributions = NULL;
+        minStorageDistributions = nullptr;
 
         // Initialize bounds on the search space
         initBoundsSearchSpace(g);
@@ -1393,14 +1390,14 @@ namespace SDF
         d->sz = lbDistributionSz;
         for (uint c = 0; c < g->nrChannels(); c++)
             d->sp[c] = minSz[c];
-        d->next = NULL;
-        d->prev = NULL;
+        d->next = nullptr;
+        d->prev = nullptr;
 
         // Add distribution to set of distributions which must be checked
         addStorageDistributionToChecklist(d);
 
         // No storage distribution set explored so far
-        lastExploredStorageDistributionSet = NULL;
+        lastExploredStorageDistributionSet = nullptr;
     }
 
     /**
@@ -1408,7 +1405,7 @@ namespace SDF
      * Analyze the trade-offs between storage distributions and throughput (using
      * auto-concurrency). The search ends as soon as a new pareto point has been
      * found in the space or when the full space has been explored. The function
-     * returns the newly discovered storage distribution set or NULL when no new set
+     * returns the newly discovered storage distribution set or nullptr when no new set
      * was found.
      */
     StorageDistributionSet *
@@ -1421,25 +1418,25 @@ namespace SDF
         dp = lastExploredStorageDistributionSet;
 
         // Last explored set reaches already maximal throughput?
-        if (dp != NULL && dp->thr == maxThroughput)
-            return NULL;
+        if (dp != nullptr && dp->thr == maxThroughput)
+            return nullptr;
 
         // Next set to be explored
-        if (dp == NULL)
+        if (dp == nullptr)
             ds = minStorageDistributions;
         else
             ds = dp->next;
 
         // Check sets of storage distributions till no distributions left to check,
         // or next pareto point is found
-        while (ds != NULL)
+        while (ds != nullptr)
         {
             // Explore all distributions with size 'ds->sz'
             exploreStorageDistributionSet(ds);
 
             // Distribution set ds has larger throughput then previous pareto point?
-            if ((dp == NULL && ds->thr > 0)
-                || (dp != NULL && ds->thr > dp->thr))
+            if ((dp == nullptr && ds->thr > 0)
+                || (dp != nullptr && ds->thr > dp->thr))
             {
                 break;
             }
@@ -1451,14 +1448,14 @@ namespace SDF
             ds = ds->next;
 
             // No distributions left with the given distribution size?
-            if (dt->distributions == NULL)
+            if (dt->distributions == nullptr)
             {
                 // Remove distr from linked list
-                if (dt->prev != NULL)
+                if (dt->prev != nullptr)
                     dt->prev->next = dt->next;
                 else
                     minStorageDistributions = dt->next;
-                if (dt->next != NULL)
+                if (dt->next != nullptr)
                     dt->next->prev = dt->prev;
 
                 // Cleanup dt
@@ -1467,20 +1464,20 @@ namespace SDF
         }
 
         // Unexplored distributions left, but maximal throughput reached?
-        if (ds != NULL && ds->next != NULL && ds->thr == maxThroughput)
+        if (ds != nullptr && ds->next != nullptr && ds->thr == maxThroughput)
         {
             // Pointer to first set which must be removed
             ds = ds->next;
 
             // Mark previous set as last set in list of minimal storage distr
-            ds->prev->next = NULL;
+            ds->prev->next = nullptr;
 
             // Remove all unexplored distributions (and sets)
-            while (ds != NULL)
+            while (ds != nullptr)
             {
                 // Remove all distributions within the set ds
                 d = ds->distributions;
-                while (d != NULL)
+                while (d != nullptr)
                 {
                     t = d->next;
                     deleteStorageDistribution(d);

@@ -88,7 +88,7 @@ namespace SDF
                             };
 
                             // Destructor
-                            ~State() {};
+                            ~State() = default;
 
                             // Initialize the state
                             void init(const uint nrActors, const uint nrChannels)
@@ -126,7 +126,7 @@ namespace SDF
                     };
 
                     // Destructor
-                    ~TransitionSystem() {};
+                    ~TransitionSystem() = default;
 
                     // Execute the SDFG
                     TDtime execSDFgraph(const TBufSize *sp, bool *dep);
@@ -176,17 +176,17 @@ namespace SDF
             };
 
             // Bounds on the search space
-            void initBoundsSearchSpace(TimedSDFgraph *g);
-            void initMinimalChannelSzStep(TimedSDFgraph *g);
-            void initMinimalChannelSz(TimedSDFgraph *g);
+            void initBoundsSearchSpace(TimedSDFgraph *graph);
+            void initMinimalChannelSzStep(TimedSDFgraph *graph);
+            void initMinimalChannelSz(TimedSDFgraph *graph);
             void initLbDistributionSz(TimedSDFgraph *g);
-            void initMaxThroughput(TimedSDFgraph *g);
+            void initMaxThroughput(TimedSDFgraph *graph);
 
             // Storage distributions
             StorageDistribution *newStorageDistribution();
-            void deleteStorageDistribution(StorageDistribution *d);
+            static void deleteStorageDistribution(StorageDistribution *d);
             void execStorageDistribution(StorageDistribution *d);
-            void minimizeStorageDistributionsSet(StorageDistributionSet *ds);
+            static void minimizeStorageDistributionsSet(StorageDistributionSet *ds);
             bool addStorageDistributionToChecklist(StorageDistribution *d);
             void exploreStorageDistribution(StorageDistributionSet *ds,
                                             StorageDistribution *d);
