@@ -43,8 +43,6 @@
 namespace FSM
 {
 
-    using namespace std;
-
     // the abstract ancestor of FSM types
     namespace Abstract
     {

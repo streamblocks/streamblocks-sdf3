@@ -38,10 +38,6 @@
 
 #include <cmath>
 
-#ifdef _MSC_VER
-#define INFINITY HUGE_VAL
-#endif
-
 #define MAX(a,b) ((a) > (b) ? (a) : (b))
 #define MIN(a,b) ((a) < (b) ? (a) : (b))
 

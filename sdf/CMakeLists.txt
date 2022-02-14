@@ -48,6 +48,3 @@ target_link_libraries(sdf3-sdf PUBLIC
         sdf_output_schedule
         sdf_output_xml
         )
-
-set_target_properties(sdf3-sdf PROPERTIES
-        FRAMEWORK TRUE)

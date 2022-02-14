@@ -41,8 +41,6 @@
 #include "base/string/cstring.h"
 #include "base/exception/exception.h"
 
-using namespace std;
-
 
 typedef enum
 {

@@ -129,7 +129,7 @@ CString *ShellNix::readFile(const CString &fullPath)
     ifstream thefile;
 
     // string stream to generate resulting string
-    stringstream out(stringstream::out);
+    std::stringstream out(std::stringstream::out);
 
     // open the file
     thefile.open(fullPath, ifstream::in);

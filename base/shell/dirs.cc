@@ -47,8 +47,6 @@
 #include <fnmatch.h>
 #endif
 
-using namespace std;
-
 /**
  * get_dirs
  * return a list of subdirectories of 'path'

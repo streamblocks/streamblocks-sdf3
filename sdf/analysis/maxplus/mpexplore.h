@@ -43,7 +43,6 @@
 #include "../../../base/maxplus/maxplus.h"
 #include "sdf/base/algo/repetition_vector.h"
 
-using namespace std;
 using namespace MaxPlus;
 
 namespace SDF

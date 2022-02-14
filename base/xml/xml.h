@@ -41,83 +41,6 @@
 
 #include "../string/cstring.h"
 
-#ifdef _MSC_VER
-
-#include "tchar.h"
-
-#import <msxml6.dll> named_guids
-using namespace MSXML2;
-
-typedef MSXML2::IXMLDOMNodePtr                  XmlNode;
-typedef MSXML2::IXMLDOMDocument2Ptr             XmlDocument;
-typedef MSXML2::IXMLDOMElementPtr               XmlElement;
-typedef MSXML2::IXMLDOMAttributePtr             XmlAttribute;
-typedef MSXML2::IXMLDOMCommentPtr               XmlComment;
-typedef MSXML2::IXMLDOMNamedNodeMapPtr          XmlNamedNodeMap;
-typedef MSXML2::IXMLDOMNodeListPtr              XmlNodeList;
-typedef MSXML2::IXMLDOMDocumentFragmentPtr      XmlDocumentFragment;
-typedef MSXML2::IXMLDOMCDATASectionPtr          XmlCDataSection;
-typedef MSXML2::IXMLDOMProcessingInstructionPtr XmlProcessingInstruction;
-typedef MSXML2::IXMLDOMSchemaCollectionPtr      XmlSchemaCollection;
-typedef MSXML2::IXMLDOMSchemaCollectionPtr      XmlSchemaCollection;
-typedef MSXML2::IXMLDOMParseErrorPtr            XmlParseError;
-typedef MSXML2::IXSLProcessorPtr                XslProcessor;
-typedef MSXML2::IXSLTemplatePtr                 XslTemplate;
-
-#define CLSID_XmlDocument                       __uuidof(MSXML2::DOMDocument60)
-#define CLSID_XmlSchemaCache                    __uuidof(MSXML2::XMLSchemaCache60)
-#define CLSID_XmlDomDocument                    __uuidof(MSXML2::DOMDocument60)
-
-class CNode
-{
-    private:
-        friend class CDoc;
-        XmlNode  realNode;
-        CNode(XmlNode n);
-        XmlNode findNode(XmlNode startNode, const CString &name);
-        static XmlDocument nodeFactory();
-        static XmlDocument xmlNodeFactory;
-    public:
-        CNode(const CString &name);
-        CString getName() const;
-        CNode *parent() const;
-        bool hasChildNode(const CString &name);
-        CNode *findChildNode(const CString &name);
-        CNode *findNode(const CString &name);
-        CString getContent();
-        void setContent(const CString &text);
-        CString getXML();
-        CNode *addChildNode(const CString &name, const CString &content);
-        CNode *addChildNode(CNode *child);
-        CNode *copy();
-        CNode *replace(CNode *newNode);
-        CNode *nextNode(const CString &name) const;
-        bool hasAttribute(const CString &name);
-        CString getAttribute(const CString &name);
-        void addAttribute(const CString &name, const CString &value);
-        void removeAttribute(const CString &name);
-};
-typedef CNode  *CNodePtr;
-
-class CDoc
-{
-    private:
-        friend class CNode;
-        XmlDocument realDoc;
-        CDoc(XmlDocument d);
-    public:
-        CDoc();
-        CDoc(const CString &filename);
-        void setRootNode(CNode *n);
-        CNode *getRootNode();
-        void save(const CString &filename);
-        void addProcessingInstruction(const CString &pi, const CString &piArgs);
-        bool validateSchema();
-};
-typedef CDoc *CDocPtr;
-
-#else
-
 #include <libxml/parser.h>
 #include <libxml/xmlschemas.h>
 
@@ -132,7 +55,7 @@ typedef xmlDoc      CDoc;
 typedef xmlDocPtr   CDocPtr;
 
 
-#endif
+
 
 /*
  * Functions

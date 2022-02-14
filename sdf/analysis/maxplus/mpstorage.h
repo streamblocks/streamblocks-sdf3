@@ -37,14 +37,7 @@
 
 #include "mpexplore.h"
 
-// todo: change to unordered_set?
-#ifdef _MSC_VER
-#include <hash_set>
-#else
-#undef __DEPRECATED
-#include <ext/hash_set>
-using namespace __gnu_cxx;
-#endif
+#include <unordered_set>
 
 namespace SDF
 {
@@ -128,7 +121,7 @@ namespace SDF
                     {
                         Token *r = &(tokens[begin]);
                         ++begin %= asize;
-                        time = max(r->productionTime, time);
+                        time = std::max(r->productionTime, time);
                     }
                     return time;
                 }
@@ -432,11 +425,9 @@ namespace SDF
         /**
          * class StoredStates
          */
-#ifdef _MSC_VER
-        class StoredStates : hash_set<State *, StateHasherAndComparator>
-#else
-        class StoredStates : hash_set<State *, StateHasher, StateComparator>
-#endif
+
+        class StoredStates : std::unordered_set<State *, StateHasher, StateComparator>
+
         {
             public:
                 void store(State *x)

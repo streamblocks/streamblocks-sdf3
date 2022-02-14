@@ -41,14 +41,7 @@
 /*   Handy wrappers to access hash maps              */
 /*****************************************************/
 
-#ifdef _MSC_VER
-#include <hash_map>
-typedef stdext::hash_map<void *, void *> CLOOKUP_MAP_VOID;
-typedef stdext::hash_map<void *, int> CLOOKUP_MAP_INT;
-#else
-#undef __DEPRECATED
-#include <ext/hash_map>
-using namespace __gnu_cxx;
+#include <unordered_map>
 
 struct hash_void
 {
@@ -57,9 +50,9 @@ struct hash_void
         return reinterpret_cast<size_t>(__x);
     }
 };
-typedef hash_map<void *, void *, hash_void> CLOOKUP_MAP_VOID;
-typedef hash_map<void *, int, hash_void>   CLOOKUP_MAP_INT;
-#endif
+typedef std::unordered_map<void *, void *, hash_void> CLOOKUP_MAP_VOID;
+typedef std::unordered_map<void *, int, hash_void>   CLOOKUP_MAP_INT;
+
 
 /**
  * CLookupPtr<T>
