@@ -44,7 +44,7 @@ namespace SDF
      * The function returns true of the SDF graph is acyclic. Else it returns
      * false.
      */
-    bool isAcyclic(SDFgraph *g)
+    bool isAcyclic(SDFGraph *g)
     {
         // Split graph in strongly connected components
         SDFgraphComponents components = stronglyConnectedComponents(g);

@@ -43,7 +43,7 @@
  * CException
  * CException container class.
  */
-class CException
+class CException: public std::exception
 {
     private:
         CString         message;

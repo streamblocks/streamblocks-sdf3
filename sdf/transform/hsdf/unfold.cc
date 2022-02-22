@@ -43,9 +43,9 @@ namespace SDF
      * unfoldHSDF ()
      * The function unfolds an HSDF graph for N times.
      */
-    SDFgraph *unfoldHSDF(SDFgraph *g, const uint N)
+    SDFGraph *unfoldHSDF(SDFGraph *g, const uint N)
     {
-        SDFgraph *h;
+        SDFGraph *h;
 
         // Check that graph g is an HSDF graph
         if (!isHSDFgraph(g))

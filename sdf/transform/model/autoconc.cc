@@ -36,30 +36,23 @@
 #include "autoconc.h"
 namespace SDF
 {
-
-
     /**
      * modelAutoConcurrencyInSDFgraph ()
      * Create a new SDF graph in which the maximum amount of auto-concurrency
      * on all actors is made explicit through self-edges.
      */
-    SDFgraph *modelAutoConcurrencyInSDFgraph(const SDFgraph *graph,
-            const uint maxDegree)
+    SDFGraph *modelAutoConcurrencyInSDFgraph(const SDFGraph *graph,
+                                             const uint maxDegree)
     {
-        SDFgraph *g;
-        SDFactor *a;
-
         // Create a copy of the original graph
         SDFcomponent comp(graph->getParent(), graph->getId());
-        g = graph->clone(comp);
+        auto g = graph->clone(comp);
 
         // Iterate over all actors in the graph
-        for (SDFactorsIter iter = g->actorsBegin(); iter != g->actorsEnd(); iter++)
+        for (auto actor : g->getActors())
         {
-            a = *iter;
-
             // Create self-edge on the actor
-            g->createChannel(a, 1, a, 1, maxDegree);
+            g->createChannel(actor, 1, actor , 1, maxDegree);
         }
 
         return g;

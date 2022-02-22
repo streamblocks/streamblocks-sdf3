@@ -51,27 +51,28 @@ namespace SDF
     {
         SDFtime t = 0;
         uint tokens = 0;
-        SDFactorsIter cycleIter = cycle.begin();
+        auto cycleIter = cycle.begin();
 
         while (cycleIter != cycle.end())
         {
-            TimedSDFactor *u = (TimedSDFactor *)(*cycleIter);
-            TimedSDFactor *v = (TimedSDFactor *)(*(++cycleIter));
+            auto *uu = (TimedSDFactor *)(*cycleIter);
+            cycleIter.operator++();
+            TimedSDFactor *vv;// = (TimedSDFactor *)(*(cycleIter));
 
             // Add execution time of actor to execution time of the cycle
-            t += u->getExecutionTime();
+            t += uu->getExecutionTime();
 
             if (cycleIter == cycle.end())
             {
                 // Next actor in cycle is the first actor
-                v = (TimedSDFactor *)(*cycle.begin());
+                vv = (TimedSDFactor *)(*cycle.begin());
             }
 
             // Find channel with minimum number of tokens to next actor in cycle
             int tokensCh = 0;
             bool firstPort = true;
-            for (SDFportsIter iterP = u->portsBegin();
-                 iterP != u->portsEnd(); iterP++)
+            for (auto iterP = uu->portsBegin();
+                 iterP != uu->portsEnd(); iterP++)
             {
                 SDFport *p = *iterP;
 
@@ -80,7 +81,7 @@ namespace SDF
                     continue;
 
                 // Connects port to next actor?
-                if (p->getChannel()->getDstActor()->getId() == v->getId())
+                if (p->getChannel()->getDstActor()->getId() == vv->getId())
                 {
                     if (firstPort)
                         tokensCh = p->getChannel()->getInitialTokens();
@@ -92,7 +93,7 @@ namespace SDF
                 }
             }
 
-            // Add tokens found between u and v to tokens on cycle
+            // Add tokens found between u and vv to tokens on cycle
             tokens += tokensCh;
         }
 

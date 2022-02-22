@@ -51,10 +51,10 @@ namespace SDF
         public:
 
             // Constructor
-            SDFactor(SDFcomponent &c);
+            explicit SDFactor(SDFcomponent &c);
 
             // Desctructor
-            virtual ~SDFactor();
+            ~SDFactor() override;
 
             // Construct
             virtual SDFactor *create(SDFcomponent &c) const;
@@ -104,9 +104,9 @@ namespace SDF
             bool isConnected() const;
 
             // Graph
-            SDFgraph *getGraph() const
+            SDFGraph *getGraph() const
             {
-                return (SDFgraph *)getParent();
+                return (SDFGraph *)getParent();
             };
 
             // Print
@@ -124,7 +124,7 @@ namespace SDF
             SDFports ports;
     };
 
-    typedef std::list<SDFactor *>        SDFactors;
+    typedef std::list<SDFactor *>       SDFactors;
     typedef SDFactors::iterator         SDFactorsIter;
     typedef SDFactors::const_iterator   SDFactorsCIter;
 

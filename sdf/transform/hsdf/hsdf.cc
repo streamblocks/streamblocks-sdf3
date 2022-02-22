@@ -43,9 +43,9 @@ namespace SDF
      * transformSDFtoHSDF ()
      * The function transform a SDF graph into a HSDF graph.
      */
-    SDFgraph *transformSDFtoHSDF(SDFgraph *g)
+    SDFGraph *transformSDFtoHSDF(SDFGraph *g)
     {
-        SDFgraph *h;
+        SDFGraph *h;
 
         // Construct a new (H)SDF graph
         SDFcomponent component = SDFcomponent(NULL, 0);

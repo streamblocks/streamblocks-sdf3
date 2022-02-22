@@ -168,7 +168,7 @@ namespace SDF
      * changeActorAssociations ()
      * Change the associated actors in the schedule.
      */
-    void StaticOrderSchedule::changeActorAssociations(SDFgraph *newGraph)
+    void StaticOrderSchedule::changeActorAssociations(SDFGraph *newGraph)
     {
         StaticOrderScheduleEntryIter pos = begin();
 

@@ -44,7 +44,7 @@ namespace SDF
      */
     TimedSDFgraph::TimedSDFgraph(SDFcomponent &c)
         :
-        SDFgraph(c)
+            SDFGraph(c)
     {
     }
 
@@ -54,7 +54,7 @@ namespace SDF
      */
     TimedSDFgraph::TimedSDFgraph()
         :
-        SDFgraph()
+            SDFGraph()
     {
     }
 
@@ -139,7 +139,7 @@ namespace SDF
                                   const CNodePtr sdfPropertiesNode)
     {
         // Construct SDFG
-        SDFgraph::construct(sdfNode);
+        SDFGraph::construct(sdfNode);
 
         // Any properties to be set?
         if (sdfPropertiesNode == NULL)

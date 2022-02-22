@@ -319,7 +319,7 @@ namespace SDF
      * hapiNetworkConstructor ()
      * Output an SDF graph constructor to the output stream
      */
-    void hapiNetworkConstructor(ostream &out, SDFgraph *g)
+    void hapiNetworkConstructor(ostream &out, SDFGraph *g)
     {
         out << g->getType() << "::" << g->getType() << "(const class Id &n) :";
         out << endl;

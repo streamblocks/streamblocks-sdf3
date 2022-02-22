@@ -93,7 +93,7 @@ namespace SDF
      * A graph is connected if a DFS on the undirected graph from an
      * arbitrary node visits all nodes in the graph.
      */
-    bool isConnected(SDFgraph *g)
+    bool isConnected(SDFGraph *g)
     {
         // for each u in G do color[u] <- white
         v_int color(g->nrActors(), 0);

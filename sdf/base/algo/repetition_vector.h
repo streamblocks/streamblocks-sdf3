@@ -51,14 +51,14 @@ namespace SDF
      * computeRepetitionVector ()
      * The function computes the repetition vector of an SDFG.
      */
-    RepetitionVector computeRepetitionVector(SDFgraph *g);
+    RepetitionVector computeRepetitionVector(SDFGraph *g);
 
     /**
      * isSDFgraphConsistent ()
      * The function checks the consistency of the SDFG and returns true when
      * the graph is consistent, else it returns false.
      */
-    bool isSDFgraphConsistent(SDFgraph *g);
+    bool isSDFgraphConsistent(SDFGraph *g);
 
 }//namespace SDF
 #endif

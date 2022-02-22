@@ -115,6 +115,7 @@ namespace SDF
         out << "       throughput" << endl;
         out << "       buffersize" << endl;
         out << "       buffersize_ning_gao" << endl;
+        out << "       buffersize_ning_gao_hijdra" << endl;
         out << "       buffersize_capacity_constrained" << endl;
         out << "       latency(method,srcActor,dstActor)" << endl;
         out << "       binding_aware_throughput([NSoC,MPFlow])" << endl;
@@ -251,7 +252,7 @@ namespace SDF
 
         // Open file
         appGraphDoc = CParseFile(file);
-        if (appGraphDoc == NULL)
+        if (appGraphDoc == nullptr)
             throw CException("Failed loading application from '" + file + "'.");
 
         // Locate the sdf3 root element and check module type
@@ -264,7 +265,7 @@ namespace SDF
 
         // Get application graph node
         appGraphNode = CGetChildNode(sdf3Node, "applicationGraph");
-        if (appGraphNode == NULL)
+        if (appGraphNode == nullptr)
             throw CException("No application graph in '" + file + "'.");
 
         return appGraphNode;
@@ -282,7 +283,7 @@ namespace SDF
 
         // Open file
         archGraphDoc = CParseFile(file);
-        if (archGraphDoc == NULL)
+        if (archGraphDoc == nullptr)
             throw CException("Failed loading application from '" + file + "'.");
 
         // Locate the sdf3 root element and check module type
@@ -311,7 +312,7 @@ namespace SDF
 
         // Open file
         mappingDoc = CParseFile(file);
-        if (mappingDoc == NULL)
+        if (mappingDoc == nullptr)
             throw CException("Failed loading application from '" + file + "'.");
 
         // Locate the sdf3 root element and check module type
@@ -338,7 +339,7 @@ namespace SDF
         parseCommandLine(argc, argv);
 
         // Check required settings
-        if (settings.graphFile.empty() || settings.arguments.size() == 0)
+        if (settings.graphFile.empty() || settings.arguments.empty())
         {
             helpMessage(cerr);
             throw CException("");
@@ -592,14 +593,14 @@ namespace SDF
             out << "      xsi:noNamespaceSchemaLocation='http://www.es.ele.tue.nl/sdf3/xsd/sdf3-sdf.xsd'>" << endl;
             out << "    <storageThroughputTradeOffs>" << endl;
 
-            for (StorageDistributionSet *p = minStorageDistributions; p != NULL;
+            for (StorageDistributionSet *p = minStorageDistributions; p != nullptr;
                  p = p->next)
             {
                 out << "        <distributionsSet thr='";
                 out << p->thr;
                 out << "' sz='" << p->sz << "'>" << endl;
                 for (StorageDistribution *d = p->distributions;
-                     d != NULL; d = d->next)
+                     d != nullptr; d = d->next)
                 {
                     out << "            <distribution>" << endl;
                     for (uint c = 0; c < g->nrChannels(); c++)
@@ -765,14 +766,14 @@ namespace SDF
             out << "     xsi:noNamespaceSchemaLocation='http://www.es.ele.tue.nl/sdf3/xsd/sdf3-sdf.xsd'>" << endl;
             out << "    <storageThroughputTradeOffs>" << endl;
 
-            for (StorageDistributionSet *p = minStorageDistributions; p != NULL;
+            for (StorageDistributionSet *p = minStorageDistributions; p != nullptr;
                  p = p->next)
             {
                 out << "        <distributionsSet thr='";
                 out << p->thr;
                 out << "' sz='" << p->sz << "'>" << endl;
                 for (StorageDistribution *d = p->distributions;
-                     d != NULL; d = d->next)
+                     d != nullptr; d = d->next)
                 {
                     out << "            <distribution>" << endl;
                     for (uint c = 0; c < gConstrained->nrChannels(); c++)
@@ -787,7 +788,7 @@ namespace SDF
 
                             // Channel ch of which storage space is modeled with
                             // channel c appears in the original graph g?
-                            if (g->getChannel(ch->getName()) != NULL)
+                            if (g->getChannel(ch->getName()) != nullptr)
                             {
                                 // Channel is not a self-edge added to remove
                                 // auto-concurrency
@@ -829,10 +830,10 @@ namespace SDF
 
             // Find pointer to src and dst actor in graph
             srcActor = g->getActor(srcActorName);
-            if (srcActor == NULL)
+            if (srcActor == nullptr)
                 throw CException("No source actor found.");
             dstActor = g->getActor(dstActorName);
-            if (dstActor == NULL)
+            if (dstActor == nullptr)
                 throw CException("No destination actor found.");
 
             // Measure execution time
@@ -915,12 +916,12 @@ namespace SDF
             }
 
             // Create a platform graph
-            if (settings.xmlArchGraph == NULL)
+            if (settings.xmlArchGraph == nullptr)
                 throw CException("No architectureGraph given.");
             platformGraph = constructPlatformGraph(settings.xmlArchGraph);
 
             // Set the mapping of the application onto the platform graph
-            if (settings.xmlMapping == NULL)
+            if (settings.xmlMapping == nullptr)
                 throw CException("No mapping given.");
             setMappingPlatformGraph(platformGraph, g, settings.xmlMapping);
 
@@ -993,23 +994,23 @@ namespace SDF
             mpe.G = G;
 
             CNode *sdfPropertiesNode = CGetChildNode(settings.xmlAppGraph, "sdfProperties");
-            if (sdfPropertiesNode == NULL)
+            if (sdfPropertiesNode == nullptr)
                 throw CException("Invalid xml file - missing 'sdfProperties' node");
             CNode *graphPropertiesNode = CGetChildNode(sdfPropertiesNode, "graphProperties");
-            if (graphPropertiesNode == NULL)
+            if (graphPropertiesNode == nullptr)
                 throw CException("Invalid xml file - missing 'graphProperties' node");
 
             vector<MPTime> *gamma_s_v = new vector<MPTime>;
 
             CNode *mpschedule_ststNode = CGetChildNode(graphPropertiesNode, "mpschedule_steadystate");
-            if (mpschedule_ststNode == NULL)
+            if (mpschedule_ststNode == nullptr)
                 throw CException("Invalid xml file - missing 'mpschedule_steadystate' node");
 
             CNode *channelNode = CGetChildNode(mpschedule_ststNode, "channel");
-            while (channelNode != NULL)
+            while (channelNode != nullptr)
             {
                 CNode *tokenNode = CGetChildNode(channelNode, "token");
-                while (tokenNode != NULL)
+                while (tokenNode != nullptr)
                 {
                     CString v = CGetNodeContent(tokenNode);
                     gamma_s_v->push_back(CDouble(v));
@@ -1019,7 +1020,7 @@ namespace SDF
             }
 
             CNode *mpdelay_periodNode = CGetChildNode(graphPropertiesNode, "mpperiod");
-            if (mpdelay_periodNode == NULL)
+            if (mpdelay_periodNode == nullptr)
                 throw CException("Invalid xml file - missing 'mpperiod' node");
             CString v = CGetNodeContent(mpdelay_periodNode);
             MPTime period = MPTime((double)v);
@@ -1030,15 +1031,15 @@ namespace SDF
             vector<MPTime> *gamma0_v;
 
             CNode *mpschedule_initNode = CGetChildNode(graphPropertiesNode, "mpschedule_initial");
-            while (mpschedule_initNode != NULL)
+            while (mpschedule_initNode != nullptr)
             {
                 gamma0_v = new vector<MPTime>;
 
                 channelNode = CGetChildNode(mpschedule_initNode, "channel");
-                while (channelNode != NULL)
+                while (channelNode != nullptr)
                 {
                     CNode *tokenNode = CGetChildNode(channelNode, "token");
-                    while (tokenNode != NULL)
+                    while (tokenNode != nullptr)
                     {
                         CString v = CGetNodeContent(tokenNode);
                         gamma0_v->push_back(CDouble(v));
@@ -1133,7 +1134,7 @@ namespace SDF
 
         // Find sdf graph in XML structure
         sdfNode = CGetChildNode(settings.xmlAppGraph, "sdf");
-        if (sdfNode == NULL)
+        if (sdfNode == nullptr)
             throw CException("Invalid xml file - missing 'sdf' node");
         sdfPropertiesNode = CGetChildNode(settings.xmlAppGraph, "sdfProperties");
 

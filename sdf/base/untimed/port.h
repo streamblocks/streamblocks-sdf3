@@ -50,7 +50,7 @@ namespace SDF
     class SDFport;
     class SDFactor;
     class SDFchannel;
-    class SDFgraph;
+    class SDFGraph;
 
     /**
      * SDFport

@@ -46,8 +46,8 @@ namespace SDF
      * Create a new SDF graph in which the maximum amount of auto-concurrency
      * on all actors is made explicit through self-edges.
      */
-    SDFgraph *modelAutoConcurrencyInSDFgraph(const SDFgraph *graph,
-            const uint maxDegree);
+    SDFGraph *modelAutoConcurrencyInSDFgraph(const SDFGraph *graph,
+                                             const uint maxDegree);
 
 }//namespace SDF
 #endif

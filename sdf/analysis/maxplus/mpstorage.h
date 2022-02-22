@@ -38,421 +38,431 @@
 #include "mpexplore.h"
 
 #include <unordered_set>
+#include <algorithm>
 
-namespace SDF
-{
+namespace SDF::MaxPlusAnalysis {
 
-    namespace MaxPlusAnalysis
-    {
+    using namespace GraphDecoration;
 
-        using namespace GraphDecoration;
+    /**
+     * class Token
+     * Token represents a MaxPlus timestamped token in an SDF graph.
+     */
 
-        /**
-         * class Token
-         * Token represents a MaxPlus timestamped token in an SDF graph.
-         */
+    class Token {
+    public:
+        // Constructor
+        Token() {
+            productionTime = 0.0;
+        }
 
-        class Token
-        {
-            public:
-                // Constructor
-                Token()
-                {
-                    productionTime = 0.0;
-                }
-                Token(MPTime t)
-                {
-                    productionTime = t;
-                }
+        Token(MPTime t) {
+            productionTime = t;
+        }
 
-                // Copy
-                Token *copy();
+        // Copy
+        Token *copy();
 
-            public:
-                MPTime productionTime;
-        };
+    public:
+        MPTime productionTime;
+    };
 
-        // Switch between dynamic and static allocation of token FIFOs,
-        // but static performs best
+    // Switch between dynamic and static allocation of token FIFOs,
+    // but static performs best
 #define TokenFIFO TokenFIFO_Static
-        //#define TokenFIFO TokenFIFO_Dynamic
+    //#define TokenFIFO TokenFIFO_Dynamic
 
 
-        /**
-         * class TokenFIFO_Dynamic
-         * A dynamically managed token fifo based on std:list
+    /**
+     * class TokenFIFO_Dynamic
+     * A dynamically managed token fifo based on std:list
+     */
+    class TokenFIFO_Dynamic : public std::list<Token *> {
+    public:
+        MPTime removeFirst();
+
+        void append(MPTime t);
+
+        TokenFIFO_Dynamic *copy();
+
+        size_t hashValue() const;
+
+        bool compare(TokenFIFO_Dynamic *l) const;
+
+        Token *first();
+
+        void decreaseAll(MPDelay amount);
+
+        void streamOn(std::ostream &s);
+    };
+
+    /**
+     * class TokenFIFO_Static
+     * A statically managed token fifo
+     */
+    class TokenFIFO_Static {
+    public:
+        TokenFIFO_Static(int sz);
+
+        MPTime removeFirst();
+
+        /*
+         * Read N timestamped tokens from the FIFO, return the max of all read
+         * timestamps. To save time it is not checked whether the token contains
+         * N tokens, only use this method if you are sure there are.
          */
-        class TokenFIFO_Dynamic: public std::list<Token *>
-        {
-            public:
-                MPTime removeFirst();
-                void append(MPTime t);
-                TokenFIFO_Dynamic *copy();
-                size_t hashValue() const;
-                bool compare(TokenFIFO_Dynamic *l) const;
-                Token *first();
-                void decreaseAll(MPDelay amount);
-                void streamOn(std::ostream &s);
-        };
+        inline MPTime removeFirstN(unsigned int n) {
+            MPTime time;
+            n--;
+            Token *r = &(tokens[begin]);
+            ++begin %= asize;
+            time = r->productionTime;
+            while (n-- > 0) {
+                Token *r = &(tokens[begin]);
+                ++begin %= asize;
+                time = (std::max)(r->productionTime, time);
+            }
+            return time;
+        }
 
-        /**
-         * class TokenFIFO_Static
-         * A statically managed token fifo
+        MPTime removeLast();
+
+        void append(MPTime t);
+
+        /* Append n tokens to the FIFO, all timestamped with t. To save time it is
+         * not checked whether there is space for the tokens, only use this method
+         * if you are sure there is.
          */
-        class TokenFIFO_Static
-        {
-            public:
-                TokenFIFO_Static(int sz);
-                MPTime removeFirst();
+        inline void append(MPTime t, unsigned int n) {
+            while (n-- > 0) {
+                tokens[end].productionTime = t;
+                ++end %= asize;
+            }
+        }
 
-                /*
-                 * Read N timestamped tokens from the FIFO, return the max of all read
-                 * timestamps. To save time it is not checked whether the token contains
-                 * N tokens, only use this method if you are sure there are.
-                 */
-                inline MPTime removeFirstN(unsigned int n)
-                {
-                    MPTime time;
-                    n--;
-                    Token *r = &(tokens[begin]);
-                    ++begin %= asize;
-                    time = r->productionTime;
-                    while (n-- > 0)
-                    {
-                        Token *r = &(tokens[begin]);
-                        ++begin %= asize;
-                        time = std::max(r->productionTime, time);
-                    }
-                    return time;
-                }
+        void append_front(MPTime t);
 
-                MPTime removeLast();
-                void append(MPTime t);
+        TokenFIFO_Static *copy();
 
-                /* Append n tokens to the FIFO, all timestamped with t. To save time it is
-                 * not checked whether there is space for the tokens, only use this method
-                 * if you are sure there is.
-                 */
-                inline void append(MPTime t, unsigned int n)
-                {
-                    while (n-- > 0)
-                    {
-                        tokens[end].productionTime = t;
-                        ++end %= asize;
-                    }
-                }
+        size_t hashValue() const;
 
-                void append_front(MPTime t);
-                TokenFIFO_Static *copy();
-                size_t hashValue() const;
-                bool compare(TokenFIFO_Static *l) const;
-                Token *first();
-                MPTime getMax();
-                void decreaseAll(MPDelay amount);
-                void smooth(TokenFIFO_Static *l);
-                void streamOn(std::ostream &s) const;
-                unsigned int size() const;
-                bool equals(const TokenFIFO_Static *l) const;
-                TokenFIFO_Static *minus(TokenFIFO_Static *l) const;
-                void add(double factor, TokenFIFO_Static *l);
-                void maxWith(double offset, TokenFIFO_Static *l);
-                void addToStdVector(vector<double>* v) const;
-                unsigned int addToVector(MaxPlus::Vector *v, unsigned int k) const;
+        bool compare(TokenFIFO_Static *l) const;
 
-            private:
-                Token *tokens;
-                unsigned int asize; // size of the array
-                unsigned int begin;
-                unsigned int end;
-        };
+        Token *first();
+
+        MPTime getMax();
+
+        void decreaseAll(MPDelay amount);
+
+        void smooth(TokenFIFO_Static *l);
+
+        void streamOn(std::ostream &s) const;
+
+        unsigned int size() const;
+
+        bool equals(const TokenFIFO_Static *l) const;
+
+        TokenFIFO_Static *minus(TokenFIFO_Static *l) const;
+
+        void add(double factor, TokenFIFO_Static *l);
+
+        void maxWith(double offset, TokenFIFO_Static *l);
+
+        void addToStdVector(vector<double> *v) const;
+
+        unsigned int addToVector(MaxPlus::Vector *v, unsigned int k) const;
+
+    private:
+        Token *tokens;
+        unsigned int asize; // size of the array
+        unsigned int begin;
+        unsigned int end;
+    };
 
 
-        /**
-         * class State
-         * State represents a distribution of timestamped tokens over the channels of
-         * the SDFG
-         */
-        class State
-        {
-            public:
-                State(Graph *G);
-                State(size_t sz);
-                ~State();
-                State *copy();
-                static State *zeroState(Graph *G);
-                static State *fromVector(Graph *G, MaxPlus::Vector *v);
-                static State *zeroScheduleState(Graph *G);
-                inline  MPTime consume(Port *p)
-                {
-                    Channel *c = p->channel;
-                    TokenFIFO *l = table[c->index];
-                    return l->removeFirstN(p->rate);
-                }
-                MPTime consume(Port *p, int n);
-                MPTime consume_back(Port *p);
-                inline
-                void produce(Port *p, MPTime t)
-                {
-                    Channel *c = p->channel;
-                    TokenFIFO *l = table[c->index];
-                    l->append(t, p->rate);
-                }
-                void produce_front(Port *p, MPTime t);
-                bool actorEnabled(Actor *a);
-                bool actorReverseEnabled(Actor *a);
-                size_t hashValue() const;
-                bool compare(const State *s) const;
-                bool equals(const State *s) const;
-                State *minus(State *v) const;
-                void add(double factor, State *v);
-                void maxWith(double offset, State *v);
-                Token *firstToken();
-                MPDelay normalize();
-                MPTime norm();
-                void smooth(State *y);
-                void streamOn(std::ostream &s);
-                vector<double>* asStdVector(void);
-                MaxPlus::Vector *asVector(void);
-                MPTime timestamp;
-                unsigned int count;
+    /**
+     * class State
+     * State represents a distribution of timestamped tokens over the channels of
+     * the SDFG
+     */
+    class State {
+    public:
+        State(Graph *G);
 
-            private:
-                size_t size;
-                TokenFIFO **table;
-                void initSize(size_t sz);
-        };
+        State(size_t sz);
 
-        /**
-         * class TokenList
-         */
-        class TokenList : public vector<Token *>
-        {
-            public:
-                // Destructor
-                ~TokenList()
-                {
-                    for (vector<Token *>::iterator i = this->begin();
-                         i != this->end(); i++)
-                    {
-                        delete *i;
-                    }
-                }
-        };
+        ~State();
 
-        /**
-         * class SymbolicToken
-         */
-        class SymbolicToken : public TokenList
-        {
-            public:
-                static SymbolicToken *zeroToken(unsigned int sz);
-                static SymbolicToken *minusInfinityToken(unsigned int sz);
-                static SymbolicToken *initialToken(unsigned int sz, unsigned int n);
-                SymbolicToken *copy(void);
-                SymbolicToken *maxWith(SymbolicToken *t);
-                SymbolicToken *add(MPTime a);
-                void streamOn(std::ostream &s);
-        };
+        State *copy();
 
-        /**
-         * class SymbolicTokenFIFO
-         */
-        class SymbolicTokenFIFO
-        {
-            public:
-                SymbolicTokenFIFO(int fsz, int tsz);
-                inline void append(SymbolicToken *t, int n)
-                {
-                    // assume there is space, don't check
-                    while (n-- > 0)
-                    {
-                        tokens[end] = t;
-                        ++end %= asize;
-                    }
-                }
-                inline SymbolicToken *removeFirstN(int n)
-                {
-                    // check if n is 0
-                    if (n == 0)
-                    {
-                        return SymbolicToken::minusInfinityToken(this->tokenSize);
-                    }
+        static State *zeroState(Graph *G);
 
-                    // assume there is a token to be read, don't check
-                    SymbolicToken *time, *t, *oldtime;
+        static State *fromVector(Graph *G, MaxPlus::Vector *v);
 
-                    n--;
-                    time = tokens[begin]->copy();
-                    t = tokens[begin];
-                    ++begin %= asize;
+        static State *zeroScheduleState(Graph *G);
 
-                    while (n-- > 0)
-                    {
-                        t = tokens[begin];
-                        ++begin %= asize;
-                        oldtime = time;
-                        time = t->maxWith(time);
-                        delete oldtime;
-                    }
-                    return time;
-                }
-                inline
-                SymbolicToken *peek(unsigned int n)
-                {
-                    return tokens[(begin + n) % asize];
-                }
-                int size();
-                void streamOn(std::ostream &s);
-            private:
-                SymbolicToken **tokens;
-                int asize; // size of the array
-                int begin;
-                int end;
-                int tokenSize; // size of a single symbolic token in the fifio
-                //positions starting from begin up to but not including end are filled
-        };
+        inline MPTime consume(Port *p) {
+            Channel *c = p->channel;
+            TokenFIFO *l = table[c->index];
+            return l->removeFirstN(p->rate);
+        }
 
-        /**
-         * class SymbolicState
-         */
-        class SymbolicState
-        {
-            public:
-                SymbolicState(Graph *G);
-                SymbolicState(size_t sz, size_t stsz);
-                ~SymbolicState();
-                static SymbolicState *zeroState(Graph *G);
-                inline
-                SymbolicToken *consume(Port *p)
-                {
-                    Channel *c = p->channel;
-                    SymbolicTokenFIFO *f = table[c->index];
-                    return f->removeFirstN(p->rate);
-                }
-                inline
-                void produce(Port *p, SymbolicToken *t)
-                {
-                    Channel *c = p->channel;
-                    SymbolicTokenFIFO *f = table[c->index];
-                    f->append(t, p->rate);
-                }
-                bool actorEnabled(Actor *a);
-                void streamOn(std::ostream &s);
-                inline
-                size_t getSize()
-                {
-                    return size;
-                }
-                inline
-                size_t getSymbolicTokenSize()
-                {
-                    return symbolicTokenSize;
-                }
-                inline
-                SymbolicTokenFIFO *get(unsigned int i)
-                {
-                    return table[i];
-                }
-                // to support iterating over all (initial tokens)
-                unsigned int numberOfTokens();
-                SymbolicToken *firstToken(void);
-                SymbolicToken *nextToken(void);
-            private:
-                size_t size;
-                size_t symbolicTokenSize;
-                SymbolicTokenFIFO **table;
-                void initSize(size_t sz);
+        MPTime consume(Port *p, int n);
 
-                // state to support iterating over all tokens
-                // make nicer implementation later...
-                unsigned int currentChannelIndex;
-                unsigned int currentTokenIndex;
-        };
+        MPTime consume_back(Port *p);
 
+        inline
+        void produce(Port *p, MPTime t) {
+            Channel *c = p->channel;
+            TokenFIFO *l = table[c->index];
+            l->append(t, p->rate);
+        }
 
-#ifdef _MSC_VER
+        void produce_front(Port *p, MPTime t);
 
-        /**
-         * class StateHasherAndComparator
-         * Compute hash value of state and compares.
-         */
-        class StateHasherAndComparator: public stdext::hash_compare<State *, less<State *>>
-        {
-            public:
-                size_t operator()(const State *s) const
-                {
-                    return s->hashValue();
-                }
+        bool actorEnabled(Actor *a);
 
-                bool operator()(const State *s1, const State *s2) const
-                {
-                    return s1->compare(s2);
-                }
-        };
+        bool actorReverseEnabled(Actor *a);
 
-#else
+        size_t hashValue() const;
 
+        bool compare(const State *s) const;
 
-        /**
-         * class StateHasher
-         */
-        class StateHasher
-        {
-            public:
-                size_t operator()(const State *s) const
-                {
-                    size_t h = s->hashValue();
-                    return h;
-                }
-        };
+        bool equals(const State *s) const;
 
-        /**
-         * class StateComparator
-         */
-        class StateComparator
-        {
-            public:
-                bool operator()(const State *s1, const State *s2) const
-                {
-                    return s1->equals(s2);
-                }
-        };
+        State *minus(State *v) const;
 
-#endif
+        void add(double factor, State *v);
+
+        void maxWith(double offset, State *v);
+
+        Token *firstToken();
+
+        MPDelay normalize();
+
+        MPTime norm();
+
+        void smooth(State *y);
+
+        void streamOn(std::ostream &s);
+
+        vector<double> *asStdVector(void);
+
+        MaxPlus::Vector *asVector(void);
+
+        MPTime timestamp;
+        unsigned int count;
+
+    private:
+        size_t size;
+        TokenFIFO **table;
+
+        void initSize(size_t sz);
+    };
+
+    /**
+     * class TokenList
+     */
+    class TokenList : public vector<Token *> {
+    public:
+        // Destructor
+        ~TokenList() {
+            for (vector<Token *>::iterator i = this->begin();
+                 i != this->end(); i++) {
+                delete *i;
+            }
+        }
+    };
+
+    /**
+     * class SymbolicToken
+     */
+    class SymbolicToken : public TokenList {
+    public:
+        static SymbolicToken *zeroToken(unsigned int sz);
+
+        static SymbolicToken *minusInfinityToken(unsigned int sz);
+
+        static SymbolicToken *initialToken(unsigned int sz, unsigned int n);
+
+        SymbolicToken *copy(void);
+
+        SymbolicToken *maxWith(SymbolicToken *t);
+
+        SymbolicToken *add(MPTime a);
+
+        void streamOn(std::ostream &s);
+    };
+
+    /**
+     * class SymbolicTokenFIFO
+     */
+    class SymbolicTokenFIFO {
+    public:
+        SymbolicTokenFIFO(int fsz, int tsz);
+
+        inline void append(SymbolicToken *t, int n) {
+            // assume there is space, don't check
+            while (n-- > 0) {
+                tokens[end] = t;
+                ++end %= asize;
+            }
+        }
+
+        inline SymbolicToken *removeFirstN(int n) {
+            // check if n is 0
+            if (n == 0) {
+                return SymbolicToken::minusInfinityToken(this->tokenSize);
+            }
+
+            // assume there is a token to be read, don't check
+            SymbolicToken *time, *t, *oldtime;
+
+            n--;
+            time = tokens[begin]->copy();
+            t = tokens[begin];
+            ++begin %= asize;
+
+            while (n-- > 0) {
+                t = tokens[begin];
+                ++begin %= asize;
+                oldtime = time;
+                time = t->maxWith(time);
+                delete oldtime;
+            }
+            return time;
+        }
+
+        inline
+        SymbolicToken *peek(unsigned int n) {
+            return tokens[(begin + n) % asize];
+        }
+
+        int size();
+
+        void streamOn(std::ostream &s);
+
+    private:
+        SymbolicToken **tokens;
+        int asize; // size of the array
+        int begin;
+        int end;
+        int tokenSize; // size of a single symbolic token in the fifio
+        //positions starting from begin up to but not including end are filled
+    };
+
+    /**
+     * class SymbolicState
+     */
+    class SymbolicState {
+    public:
+        SymbolicState(Graph *G);
+
+        SymbolicState(size_t sz, size_t stsz);
+
+        ~SymbolicState();
+
+        static SymbolicState *zeroState(Graph *G);
+
+        inline
+        SymbolicToken *consume(Port *p) {
+            Channel *c = p->channel;
+            SymbolicTokenFIFO *f = table[c->index];
+            return f->removeFirstN(p->rate);
+        }
+
+        inline
+        void produce(Port *p, SymbolicToken *t) {
+            Channel *c = p->channel;
+            SymbolicTokenFIFO *f = table[c->index];
+            f->append(t, p->rate);
+        }
+
+        bool actorEnabled(Actor *a);
+
+        void streamOn(std::ostream &s);
+
+        inline
+        size_t getSize() {
+            return size;
+        }
+
+        inline
+        size_t getSymbolicTokenSize() {
+            return symbolicTokenSize;
+        }
+
+        inline
+        SymbolicTokenFIFO *get(unsigned int i) {
+            return table[i];
+        }
+
+        // to support iterating over all (initial tokens)
+        unsigned int numberOfTokens();
+
+        SymbolicToken *firstToken(void);
+
+        SymbolicToken *nextToken(void);
+
+    private:
+        size_t size;
+        size_t symbolicTokenSize;
+        SymbolicTokenFIFO **table;
+
+        void initSize(size_t sz);
+
+        // state to support iterating over all tokens
+        // make nicer implementation later...
+        unsigned int currentChannelIndex;
+        unsigned int currentTokenIndex;
+    };
 
 
+    /**
+     * class StateHasher
+     */
+    class StateHasher {
+    public:
+        size_t operator()(const State *s) const {
+            size_t h = s->hashValue();
+            return h;
+        }
+    };
 
-        /**
-         * class StoredStates
-         */
+    /**
+     * class StateComparator
+     */
+    class StateComparator {
+    public:
+        bool operator()(const State *s1, const State *s2) const {
+            return s1->equals(s2);
+        }
+    };
 
-        class StoredStates : std::unordered_set<State *, StateHasher, StateComparator>
+    /**
+     * class StoredStates
+     */
 
-        {
-            public:
-                void store(State *x)
-                {
-                    this->insert(x);
-                }
-                bool includes(State *x, State **y)
-                {
-                    StoredStates::const_iterator i;
-                    i = this->find(x);
-                    if (i != this->end())
-                    {
-                        (*y) = (*i);
-                        return true;
-                    }
-                    return false;
-                }
-                bool includes(State *x)
-                {
-                    return this->find(x) != this->end();
-                }
-        };
+    class StoredStates : std::unordered_set<State *, StateHasher, StateComparator> {
+    public:
+        void store(State *x) {
+            this->insert(x);
+        }
 
-    } // end namespace
+        bool includes(State *x, State **y) {
+            StoredStates::const_iterator i;
+            i = this->find(x);
+            if (i != this->end()) {
+                (*y) = (*i);
+                return true;
+            }
+            return false;
+        }
 
+        bool includes(State *x) {
+            return this->find(x) != this->end();
+        }
+    };
 
 }//namespace SDF
 #endif

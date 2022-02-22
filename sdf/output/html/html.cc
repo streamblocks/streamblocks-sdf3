@@ -595,7 +595,7 @@ namespace SDF
      * outputSDFgraphAsDot ()
      * The function outputs an SDF graph in DOT format.
      */
-    void SDFconvertToHTML::outputSDFgraphAsDot(SDFgraph *g, ostream &out)
+    void SDFconvertToHTML::outputSDFgraphAsDot(SDFGraph *g, ostream &out)
     {
         out << "digraph " << g->getName() << " {" << endl;
         out << "    size=\"7,10\";" << endl;

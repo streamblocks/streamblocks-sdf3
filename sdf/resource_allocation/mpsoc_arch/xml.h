@@ -44,7 +44,7 @@ namespace SDF
      * Create an XML node which describes the mapping of an application graph
      * onto an platform graph.
      */
-    CNode *createMappingNode(PlatformGraph *g, SDFgraph *appGraph);
+    CNode *createMappingNode(PlatformGraph *g, SDFGraph *appGraph);
 
     /**
      * createPlatformGraphNode ()
@@ -63,7 +63,7 @@ namespace SDF
      * Output the binding of an SDFG to an platform graph in XML
      * format.
      */
-    void outputBindingAsXML(PlatformGraph *g, SDFgraph *appGraph, ostream &out);
+    void outputBindingAsXML(PlatformGraph *g, SDFGraph *appGraph, ostream &out);
 
     /**
      * outputSystemUsageAsXML ()

@@ -223,7 +223,7 @@ namespace SDF
      * isDeadlockFree ()
      * Analyze whether an SDFG is deadlock free.
      */
-    bool SDFstateSpaceDeadlockAnalysis::isDeadlockFree(SDFgraph *g)
+    bool SDFstateSpaceDeadlockAnalysis::isDeadlockFree(SDFGraph *g)
     {
         // Create a transition system
         TransitionSystem transitionSystem(g);

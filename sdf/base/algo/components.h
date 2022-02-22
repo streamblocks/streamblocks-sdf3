@@ -55,7 +55,7 @@ namespace SDF
      * stronglyConnectedComponents ()
      * The function determines the strongly connected components in the graph.
      */
-    SDFgraphComponents stronglyConnectedComponents(SDFgraph *g);
+    SDFgraphComponents stronglyConnectedComponents(SDFGraph *g);
 
     /**
      * actorInComponent ()
@@ -68,14 +68,14 @@ namespace SDF
      * isStronglyConnectedGraph ()
      * The function checks that the graph is a strongly connnected component.
      */
-    bool isStronglyConnectedGraph(SDFgraph *g);
+    bool isStronglyConnectedGraph(SDFGraph *g);
 
     /**
      * componentToSDFgraph ()
      * The function returns an SDF graph containing all actors and channels inside
      * the component.
      */
-    SDFgraph *componentToSDFgraph(SDFgraphComponent &component);
+    SDFGraph *componentToSDFgraph(SDFgraphComponent &component);
 
 }//namespace SDF
 #endif

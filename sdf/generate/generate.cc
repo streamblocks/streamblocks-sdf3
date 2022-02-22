@@ -52,7 +52,7 @@ namespace SDF
      * Set new id's on all actors and channels starting from 0 and
      * change their names accordingly (actor<id> or ch<id>).
      */
-    void relabelSDFgraph(SDFgraph *g, CId *actorIdMap = NULL,
+    void relabelSDFgraph(SDFGraph *g, CId *actorIdMap = NULL,
                          CId *channelIdMap = NULL)
     {
         CId id;
@@ -592,7 +592,7 @@ namespace SDF
      * makeConsistent ()
      * The rates on the ports are adjuested to create a consistent SDF graph.
      */
-    void makeConsistent(SDFgraph *g)
+    void makeConsistent(SDFGraph *g)
     {
         CFractions fractions(g->nrActors(), CFraction(0, 1));
 
@@ -617,7 +617,7 @@ namespace SDF
      * graph and removing actors and channels which do not belong to
      * this component from the graph.
      */
-    void makeStronglyConnected(SDFgraph *g)
+    void makeStronglyConnected(SDFGraph *g)
     {
         SDFgraphComponents comps;
         SDFgraphComponent comp;
@@ -810,7 +810,7 @@ namespace SDF
      * Fire the actors in the SDF graph. The number of firings is n (or less in case
      * of deadlock).
      */
-    bool execSDFgraph(SDFgraph *g, uint n)
+    bool execSDFgraph(SDFGraph *g, uint n)
     {
         SDFactors readyList;
         SDFactor *a;
@@ -995,7 +995,7 @@ namespace SDF
      * The function attaches rates to all ports of the SDF graph that enforce
      * that the sum of the repetition vector entries is equal to the repVecSum.
      */
-    void assignConsistentRates(SDFgraph *g, const uint repVecSum)
+    void assignConsistentRates(SDFGraph *g, const uint repVecSum)
     {
         vector<uint> repVec(g->nrActors());
         uint remainingSum, scale;
@@ -1052,7 +1052,7 @@ namespace SDF
      * one channel from a node to another node. When multiple channels are found,
      * all except the channel that was found first are removed.
      */
-    void makeSimpleGraph(SDFgraph *g)
+    void makeSimpleGraph(SDFGraph *g)
     {
         // Iterate over all ports on all actors
         for (SDFactorsIter iter = g->actorsBegin(); iter != g->actorsEnd(); iter++)

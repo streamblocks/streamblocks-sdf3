@@ -113,7 +113,7 @@ namespace SDF
             void printFooter(ostream &out);
 
             // Conversion to PNG image
-            void outputSDFgraphAsDot(SDFgraph *g, ostream &out);
+            void outputSDFgraphAsDot(SDFGraph *g, ostream &out);
             void outputPlatformGraphAsDot(PlatformGraph *g, ostream &out);
             void outputPlatformMappingAsDot(TimedSDFgraph *sdfGraph,
                                             PlatformGraph *platformGraph, ostream &out);

@@ -142,14 +142,14 @@ namespace SDF
      * The function performs a depth first search on the graph to discover all
      * simple cycles in the graph
      */
-    SDFgraphCycles findSimpleCycles(SDFgraph *g, bool transpose = false);
+    SDFgraphCycles findSimpleCycles(SDFGraph *g, bool transpose = false);
 
     /**
      * findSimpleCycle ()
      * The function performs a depth first search on the graph to discover a
      * simple cycles in the graph. The first cycle found is returned.
      */
-    SDFgraphCycle findSimpleCycle(SDFgraph *g, bool transpose = false);
+    SDFgraphCycle findSimpleCycle(SDFGraph *g, bool transpose = false);
 
 }//namespace SDF
 #endif

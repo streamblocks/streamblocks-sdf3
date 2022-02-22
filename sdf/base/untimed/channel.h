@@ -43,7 +43,7 @@ namespace SDF
 
     // Forward class definition
     class SDFchannel;
-    class SDFgraph;
+    class SDFGraph;
 
     /**
      * SDFchannel
@@ -103,9 +103,9 @@ namespace SDF
             bool isConnected() const;
 
             // Graph
-            SDFgraph *getGraph() const
+            SDFGraph *getGraph() const
             {
-                return (SDFgraph *)getParent();
+                return (SDFGraph *)getParent();
             };
 
             // Print

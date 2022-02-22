@@ -39,45 +39,40 @@ namespace SDF
 
 
     /**
-     * SDFgraph ()
+     * SDFGraph ()
      * Constructor.
      */
-    SDFgraph::SDFgraph(SDFcomponent &c)
+    SDFGraph::SDFGraph(SDFcomponent &c)
         :
         SDFcomponent(c)
     {
     }
 
     /**
-     * SDFgraph ()
+     * SDFGraph ()
      * Constructor.
      */
-    SDFgraph::SDFgraph()
+    SDFGraph::SDFGraph()
         :
         SDFcomponent()
     {
     }
 
     /**
-     * ~SDFgraph ()
+     * SDFGraph ()
      * Destructor.
      */
-    SDFgraph::~SDFgraph()
+    SDFGraph::~SDFGraph()
     {
         // Actors
-        for (SDFactorsIter iter = actors.begin(); iter != actors.end(); iter++)
+        for (auto a : actors)
         {
-            SDFactor *a = *iter;
-
             delete a;
         }
 
         // Channels
-        for (SDFchannelsIter iter = channels.begin();
-             iter != channels.end(); iter++)
+        for (auto c : channels)
         {
-            SDFchannel *c = *iter;
-
             delete c;
         }
     }
@@ -86,9 +81,9 @@ namespace SDF
      * create ()
      * The function returns a pointer to a newly allocated SDF graph object.
      */
-    SDFgraph *SDFgraph::create(SDFcomponent &c) const
+    SDFGraph *SDFGraph::create(SDFcomponent &c) const
     {
-        return new SDFgraph(c);
+        return new SDFGraph(c);
     }
 
     /**
@@ -96,28 +91,27 @@ namespace SDF
      * The function returns a pointer to a newly allocated SDF graph object.
      * All properties, actors and channels of the graph are cloned.
      */
-    SDFgraph *SDFgraph::clone(SDFcomponent &c) const
+    SDFGraph *SDFGraph::clone(SDFcomponent &c) const
     {
-        SDFgraph *g = new SDFgraph(c);
+        auto *g = new SDFGraph(c);
 
         // Properties
         g->setName(getName());
         g->setType(getType());
 
         // Actors
-        for (SDFactorsCIter iter = actors.begin(); iter != actors.end(); iter++)
+        for (auto actor : actors)
         {
             SDFcomponent component = SDFcomponent(g, g->nrActors());
-            SDFactor *a = (*iter)->clone(component);
+            SDFactor *a = actor->clone(component);
             g->addActor(a);
         }
 
         // Channels
-        for (SDFchannelsCIter iter = channels.begin();
-             iter != channels.end(); iter++)
+        for (auto channel : channels)
         {
             SDFcomponent component = SDFcomponent(g, g->nrChannels());
-            SDFchannel *ch = (*iter)->clone(component);
+            SDFchannel *ch = channel->clone(component);
             g->addChannel(ch);
         }
 
@@ -129,9 +123,9 @@ namespace SDF
      * The function returns a pointer to a newly allocated SDF graph object.
      * All properties of the graph are copied.
      */
-    SDFgraph *SDFgraph::createCopy(SDFcomponent &c) const
+    SDFGraph *SDFGraph::createCopy(SDFcomponent &c) const
     {
-        SDFgraph *g = new SDFgraph(c);
+        auto *g = new SDFGraph(c);
 
         // Properties
         g->setName(getName());
@@ -144,7 +138,7 @@ namespace SDF
      * construct ()
      * The function initializes all actor properties based on the XML data.
      */
-    void SDFgraph::construct(const CNodePtr sdfNode)
+    void SDFGraph::construct(const CNodePtr sdfNode)
     {
         SDFcomponent component;
 
@@ -160,7 +154,7 @@ namespace SDF
 
         // Construct all actors
         for (CNodePtr actorNode = CGetChildNode(sdfNode, "actor");
-             actorNode != NULL; actorNode = CNextNode(actorNode, "actor"))
+             actorNode != nullptr; actorNode = CNextNode(actorNode, "actor"))
         {
             // Construct actor
             component = SDFcomponent(this, nrActors());
@@ -169,11 +163,11 @@ namespace SDF
 
             // Construct all ports
             for (CNodePtr portNode = CGetChildNode(actorNode, "port");
-                 portNode != NULL; portNode = CNextNode(portNode, "port"))
+                 portNode != nullptr; portNode = CNextNode(portNode, "port"))
             {
                 // Construct port
                 component = SDFcomponent(a, a->nrPorts());
-                SDFport *p = new SDFport(component);
+                auto *p = new SDFport(component);
                 p->construct(portNode);
 
                 // Add port to actor
@@ -183,7 +177,7 @@ namespace SDF
 
         // Construct all channels
         for (CNodePtr channelNode = CGetChildNode(sdfNode, "channel");
-             channelNode != NULL;
+             channelNode != nullptr;
              channelNode = CNextNode(channelNode, "channel"))
         {
             // Construct channel
@@ -197,12 +191,10 @@ namespace SDF
      * getActor ()
      * The function returns a reference to an actor with the given id.
      */
-    SDFactor *SDFgraph::getActor(const CId id)
+    SDFactor *SDFGraph::getActor(const CId id)
     {
-        for (SDFactorsIter iter = actors.begin(); iter != actors.end(); iter++)
+        for (auto a : actors)
         {
-            SDFactor *a = *iter;
-
             if (a->getId() == id)
                 return a;
         }
@@ -215,24 +207,22 @@ namespace SDF
      * getActor ()
      * The function returns a reference to an actor with the given name.
      */
-    SDFactor *SDFgraph::getActor(const CString &name)
+    SDFactor *SDFGraph::getActor(const CString &name)
     {
-        for (SDFactorsIter iter = actors.begin(); iter != actors.end(); iter++)
+        for (auto a : actors)
         {
-            SDFactor *a = *iter;
-
             if (a->getName() == name)
                 return a;
         }
 
-        return NULL;
+        return nullptr;
     }
 
     /**
      * addActor ()
      * Add an actor to a graph.
      */
-    void SDFgraph::addActor(SDFactor *a)
+    void SDFGraph::addActor(SDFactor *a)
     {
         actors.push_back(a);
     }
@@ -241,9 +231,9 @@ namespace SDF
      * removeActor ()
      * Remove an actor from a graph.
      */
-    void SDFgraph::removeActor(const CString &name)
+    void SDFGraph::removeActor(const CString &name)
     {
-        for (SDFactorsIter iter = actors.begin(); iter != actors.end(); iter++)
+        for (auto iter = actors.begin(); iter != actors.end(); iter++)
         {
             SDFactor *a = *iter;
 
@@ -261,10 +251,10 @@ namespace SDF
      * createActor ()
      * Create a new actor on the graph.
      */
-    SDFactor *SDFgraph::createActor()
+    SDFactor *SDFGraph::createActor()
     {
         SDFcomponent c = SDFcomponent(this, nrActors());
-        SDFactor *a = new SDFactor(c);
+        auto *a = new SDFactor(c);
         a->setName(CString("_a") + CString(nrActors() + 1));
         addActor(a);
 
@@ -275,9 +265,9 @@ namespace SDF
      * createActor ()
      * Create a new actor on the graph.
      */
-    SDFactor *SDFgraph::createActor(SDFcomponent &c)
+    SDFactor *SDFGraph::createActor(SDFcomponent &c)
     {
-        SDFactor *a = new SDFactor(c);
+        auto *a = new SDFactor(c);
         addActor(a);
 
         return a;
@@ -287,13 +277,10 @@ namespace SDF
      * getChannel ()
      * The function returns a reference to a channel with the given id.
      */
-    SDFchannel *SDFgraph::getChannel(const CId id)
+    SDFchannel *SDFGraph::getChannel(const CId id)
     {
-        for (SDFchannelsIter iter = channels.begin();
-             iter != channels.end(); iter++)
+        for (auto c : channels)
         {
-            SDFchannel *c = *iter;
-
             if (c->getId() == id)
                 return c;
         }
@@ -306,25 +293,22 @@ namespace SDF
      * getChannel ()
      * The function returns a reference to a channel with the given name.
      */
-    SDFchannel *SDFgraph::getChannel(const CString &name)
+    SDFchannel *SDFGraph::getChannel(const CString &name)
     {
-        for (SDFchannelsIter iter = channels.begin();
-             iter != channels.end(); iter++)
+        for (auto c : channels)
         {
-            SDFchannel *c = *iter;
-
             if (c->getName() == name)
                 return c;
         }
 
-        return NULL;
+        return nullptr;
     }
 
     /**
      * addChannel ()
      * Add a channel to a graph.
      */
-    void SDFgraph::addChannel(SDFchannel *c)
+    void SDFGraph::addChannel(SDFchannel *c)
     {
         channels.push_back(c);
     }
@@ -333,9 +317,9 @@ namespace SDF
      * removeChannel ()
      * Remove a channel from a graph.
      */
-    void SDFgraph::removeChannel(const CString &name)
+    void SDFGraph::removeChannel(const CString &name)
     {
-        for (SDFchannelsIter iter = channels.begin();
+        for (auto iter = channels.begin();
              iter != channels.end(); iter++)
         {
             SDFchannel *c = *iter;
@@ -356,9 +340,9 @@ namespace SDF
      * createChannel ()
      * Create a new channel on the graph.
      */
-    SDFchannel *SDFgraph::createChannel(SDFcomponent &c)
+    SDFchannel *SDFGraph::createChannel(SDFcomponent &c)
     {
-        SDFchannel *ch = new SDFchannel(c);
+        auto *ch = new SDFchannel(c);
         addChannel(ch);
 
         return ch;
@@ -369,7 +353,7 @@ namespace SDF
      * The function creates a channel between the source and destination actor.
      * Ports with the supplied rates are added to these actors.
      */
-    SDFchannel *SDFgraph::createChannel(SDFactor *src, SDFrate rateSrc,
+    SDFchannel *SDFGraph::createChannel(SDFactor *src, SDFrate rateSrc,
                                         SDFactor *dst, SDFrate rateDst, uint initialTokens)
     {
         // Create new channel
@@ -397,25 +381,20 @@ namespace SDF
      * print ()
      * Print the graph to the supplied output stream.
      */
-    ostream &SDFgraph::print(ostream &out)
+    ostream &SDFGraph::print(ostream &out)
     {
         out << "Graph (" << getName() << ")" << endl;
         out << "id:        " << getId() << endl;
         out << "type:      " << getType() << endl;
         out << endl;
 
-        for (SDFactorsIter iter = actors.begin(); iter != actors.end(); iter++)
+        for (auto a : actors)
         {
-            SDFactor *a = *iter;
-
             a->print(out);
         }
 
-        for (SDFchannelsIter iter = channels.begin();
-             iter != channels.end(); iter++)
+        for (auto c : channels)
         {
-            SDFchannel *c = *iter;
-
             c->print(out);
         }
 

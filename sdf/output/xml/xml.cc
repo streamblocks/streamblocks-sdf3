@@ -38,7 +38,7 @@ namespace SDF
 {
 
 
-    CNode *createSDFnode(SDFgraph *g)
+    CNode *createSDFnode(SDFGraph *g)
     {
         CNode *sdfNode;
 
@@ -241,7 +241,7 @@ namespace SDF
      * outputSDFasXML ()
      * The function outputs a SDF graph in XML format.
      */
-    void outputSDFasXML(SDFgraph *g, ostream &out)
+    void outputSDFasXML(SDFGraph *g, ostream &out)
     {
         // SDF mapping node
         CNode *sdf3Node = CNewNode("sdf3");

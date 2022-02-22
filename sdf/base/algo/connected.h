@@ -46,7 +46,7 @@ namespace SDF
      * The function returns true if the SDF graph is connected, else it
      * returns false.
      */
-    bool isConnected(SDFgraph *g);
+    bool isConnected(SDFGraph *g);
 
 }//namespace SDF
 #endif

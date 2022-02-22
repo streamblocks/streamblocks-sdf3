@@ -124,7 +124,7 @@ namespace SDF
     {
         CString strSrcActor, strSrcPort, strDstActor, strDstPort;
         SDFport *srcPort, *dstPort;
-        SDFgraph *g;
+        SDFGraph *g;
         SDFchannel *c = this;
 
         // Graph

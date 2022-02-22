@@ -156,7 +156,7 @@ namespace SDF
             void minimize();
 
             // Change the associated actors in the schedule
-            void changeActorAssociations(SDFgraph *newGraph);
+            void changeActorAssociations(SDFGraph *newGraph);
 
             // Convert the schedule to an XML representation
             CNode *convertToXML();

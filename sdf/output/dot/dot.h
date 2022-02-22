@@ -45,7 +45,7 @@ namespace SDF
      * outputSDFasDot ()
      * The function outputs a SDF graph in DOT format.
      */
-    void outputSDFasDot(SDFgraph *g, ostream &out);
+    void outputSDFasDot(SDFGraph *g, ostream &out);
 
 }//namespace SDF
 #endif

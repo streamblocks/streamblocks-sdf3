@@ -52,7 +52,7 @@ namespace SDF
      * Note: enough memory space must be allocated for the d, f, and pi vectors
      * by the calling function.
      */
-    void dfs(SDFgraph *g, v_int &d, v_int &f, SDFactor **pi,
+    void dfs(SDFGraph *g, v_int &d, v_int &f, SDFactor **pi,
              bool transpose = false);
 
 }//namespace SDF

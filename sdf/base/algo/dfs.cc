@@ -149,7 +149,7 @@ namespace SDF
      * is visited, its order is set to -1. At the end, all actors must have
      * order -1 (i.e. all actors are visited).
      */
-    void dfs(SDFgraph *g, v_int &d, v_int &f, SDFactor **pi, bool transpose)
+    void dfs(SDFGraph *g, v_int &d, v_int &f, SDFactor **pi, bool transpose)
     {
         int time;
 

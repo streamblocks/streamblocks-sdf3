@@ -46,7 +46,7 @@ namespace SDF
      * component 'comp'.
      */
     static
-    void treeVisitChildren(SDFgraph *g, SDFactor **pi, SDFactor *u,
+    void treeVisitChildren(SDFGraph *g, SDFactor **pi, SDFactor *u,
                            SDFgraphComponent &comp)
     {
         for (uint i = 0; i < g->nrActors(); i++)
@@ -71,7 +71,7 @@ namespace SDF
      * this, it performs depth-first walk on the forest given by 'pi'.
      */
     static
-    SDFgraphComponents getComponents(SDFgraph *g, SDFactor **pi)
+    SDFgraphComponents getComponents(SDFGraph *g, SDFactor **pi)
     {
         SDFgraphComponents components;
 
@@ -100,7 +100,7 @@ namespace SDF
      * stronglyConnectedComponents ()
      * The function determines the strongly connected components in the graph.
      */
-    SDFgraphComponents stronglyConnectedComponents(SDFgraph *g)
+    SDFgraphComponents stronglyConnectedComponents(SDFGraph *g)
     {
         SDFgraphComponents components;
 
@@ -148,7 +148,7 @@ namespace SDF
      * isStronglyConnectedGraph ()
      * The function checks that the graph is a strongly connnected component.
      */
-    bool isStronglyConnectedGraph(SDFgraph *g)
+    bool isStronglyConnectedGraph(SDFGraph *g)
     {
         SDFgraphComponents c;
 
@@ -165,9 +165,9 @@ namespace SDF
      * The function returns an SDF graph containing all actors and channels inside
      * the component.
      */
-    SDFgraph *componentToSDFgraph(SDFgraphComponent &component)
+    SDFGraph *componentToSDFgraph(SDFgraphComponent &component)
     {
-        SDFgraph *g, *gr;
+        SDFGraph *g, *gr;
 
         // Get pointer to graph of which the component is a part
         g = (component.front())->getGraph();

@@ -53,7 +53,7 @@ namespace SDF
      * Note: that in multiple channels in the SDF graph are translated into a single
      * edge in the graph.
      */
-    void sdfToGraph(SDFgraph *g, v_uint &nodeId, v_uint &actorId,
+    void sdfToGraph(SDFGraph *g, v_uint &nodeId, v_uint &actorId,
                     vector<v_uint> &graph, const bool transpose = false);
 
     /**
@@ -67,7 +67,7 @@ namespace SDF
      * b, the corresponding graph[u][v] = 0. Note: that in multiple channels in the
      * SDF graph are translated into a single edge in the graph.
      */
-    void sdfComponentToGraph(SDFgraph *g, SDFgraphComponent &component,
+    void sdfComponentToGraph(SDFGraph *g, SDFgraphComponent &component,
                              v_uint &nodeId, v_uint &actorId, vector<v_uint> &graph,
                              const bool transpose = false);
 

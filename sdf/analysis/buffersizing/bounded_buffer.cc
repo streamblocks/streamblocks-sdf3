@@ -259,7 +259,7 @@ namespace SDF
     {
         RepetitionVector repVec;
         int min = INT_MAX;
-        SDFactor *a = NULL;
+        SDFactor *a = nullptr;
 
         // Compute repetition vector
         repVec = computeRepetitionVector(bindingAwareSDFG);
@@ -1145,12 +1145,12 @@ namespace SDF
 
         // Maximal throughput with current distribution size equal to previous
         // throughput with previous (smaller) distribution size
-        if (ds->prev != NULL && ds->prev->thr == ds->thr)
+        if (ds->prev != nullptr && ds->prev->thr == ds->thr)
         {
             // No minimal storage distributions exist in this list
             // Iterate over the list of storage distributions
             d = ds->distributions;
-            while (d != NULL)
+            while (d != nullptr)
             {
                 // Temporary reference to next element in list
                 t = d->next;
@@ -1163,24 +1163,24 @@ namespace SDF
             }
 
             // No distributions left
-            ds->distributions = NULL;
+            ds->distributions = nullptr;
         }
         else
         {
             // Iterate over the list of storage distributions
             d = ds->distributions;
-            while (d != NULL)
+            while (d != nullptr)
             {
-                // Throughput of distribution smaller then maximum throughput with
+                // Throughput of distribution smaller than maximum throughput with
                 // same distribution size?
                 if (d->thr < ds->thr)
                 {
                     // Remove d from linked list
-                    if (d->prev != NULL)
+                    if (d->prev != nullptr)
                         d->prev->next = d->next;
                     else
                         ds->distributions = d->next;
-                    if (d->next != NULL)
+                    if (d->next != nullptr)
                         d->next->prev = d->prev;
 
                     // Temporary reference to next element in list
@@ -1218,15 +1218,15 @@ namespace SDF
         bool equalDistr;
 
         // First distribution ever added?
-        if (minStorageDistributions == NULL)
+        if (minStorageDistributions == nullptr)
         {
             // Create new set of storage distributions
             dsNew = new StorageDistributionSet;
             dsNew->sz = d->sz;
             dsNew->thr = 0;
             dsNew->distributions = d;
-            dsNew->next = NULL;
-            dsNew->prev = NULL;
+            dsNew->next = nullptr;
+            dsNew->prev = nullptr;
 
             // Set is first in list to be checked
             minStorageDistributions = dsNew;
@@ -1237,12 +1237,12 @@ namespace SDF
 
         // Find set of distributions with the same size
         ds = minStorageDistributions;
-        while (ds->next != NULL && ds->next->sz <= d->sz)
+        while (ds->next != nullptr && ds->next->sz <= d->sz)
         {
             ds = ds->next;
         }
 
-        ASSERT(ds != NULL, "checkDistributions list cannnot be empty");
+        ASSERT(ds != nullptr, "checkDistributions list cannot be empty");
 
         // Set of storage distribution with same size as d exists?
         if (ds->sz == d->sz)
@@ -1250,7 +1250,7 @@ namespace SDF
 
             // Check that distribution d does not exist in the set
             di = ds->distributions;
-            while (di != NULL)
+            while (di != nullptr)
             {
                 equalDistr = true;
 
@@ -1271,12 +1271,12 @@ namespace SDF
             }
 
             // Distribution 'd' not yet in the set, so let's add it
-            if (ds->distributions != NULL)
+            if (ds->distributions != nullptr)
                 ds->distributions->prev = d;
             d->next = ds->distributions;
             ds->distributions = d;
         }
-        else if (ds->next == NULL)
+        else if (ds->next == nullptr)
         {
             // No set of distribution in the list with same or larger size?
 
@@ -1285,7 +1285,7 @@ namespace SDF
             dsNew->sz = d->sz;
             dsNew->thr = 0;
             dsNew->distributions = d;
-            dsNew->next = NULL;
+            dsNew->next = nullptr;
             dsNew->prev = ds;
 
             // Add set to the list of sets
@@ -1366,8 +1366,8 @@ namespace SDF
                     if (i == c)
                         dNew->sp[i] += minSzStep[c];
                 }
-                dNew->next = NULL;
-                dNew->prev = NULL;
+                dNew->next = nullptr;
+                dNew->prev = nullptr;
 
                 // Add storage distribution to set of distributions to be checked
                 if (!addStorageDistributionToChecklist(dNew))
@@ -1392,7 +1392,7 @@ namespace SDF
 
         // Explore all storage distributions contained in the set
         d = ds->distributions;
-        while (d != NULL)
+        while (d != nullptr)
         {
             // Explore distribution d
             exploreStorageDistribution(ds, d, bufferChannels,
@@ -1425,8 +1425,8 @@ namespace SDF
         d->sz = lbDistributionSz;
         for (uint c = 0; c < bindingAwareSDFG->nrChannels(); c++)
             d->sp[c] = minSz[c];
-        d->next = NULL;
-        d->prev = NULL;
+        d->next = nullptr;
+        d->prev = nullptr;
 
         // Add distribution to set of distributions which must be checked
         addStorageDistributionToChecklist(d);
@@ -1434,7 +1434,7 @@ namespace SDF
         // Check sets of storage distributions till no distributions left to check,
         // or throughput bound exceeded, or maximal throughput reached
         ds = minStorageDistributions;
-        while (ds != NULL)
+        while (ds != nullptr)
         {
             // Explore all distributions with size 'ds->sz'
             exploreStorageDistributionSet(ds, bufferChannels,
@@ -1451,14 +1451,14 @@ namespace SDF
             ds = ds->next;
 
             // No distributions left with the given distribution size?
-            if (dt->distributions == NULL)
+            if (dt->distributions == nullptr)
             {
                 // Remove distr from linked list
-                if (dt->prev != NULL)
+                if (dt->prev != nullptr)
                     dt->prev->next = dt->next;
                 else
                     minStorageDistributions = dt->next;
-                if (dt->next != NULL)
+                if (dt->next != nullptr)
                     dt->next->prev = dt->prev;
 
                 // Cleanup dt
@@ -1467,20 +1467,20 @@ namespace SDF
         }
 
         // Unexplored distributions left?
-        if (ds != NULL && ds->next != NULL)
+        if (ds != nullptr && ds->next != nullptr)
         {
             // Pointer to first set which must be removed
             ds = ds->next;
 
             // Mark previous set as last set in list of minimal storage distr
-            ds->prev->next = NULL;
+            ds->prev->next = nullptr;
 
             // Remove all unexplored distributions (and sets)
-            while (ds != NULL)
+            while (ds != nullptr)
             {
                 // Remove all distributions within the set ds
                 d = ds->distributions;
-                while (d != NULL)
+                while (d != nullptr)
                 {
                     t = d->next;
                     deleteStorageDistribution(d);
@@ -1532,7 +1532,7 @@ namespace SDF
         bindingAwareSDFG = bg;
 
         // Start with an empty set of storage distributions
-        minStorageDistributions = NULL;
+        minStorageDistributions = nullptr;
 
         // Initialize bounds on the search space
         initBoundsSearchSpace(bindingAwareSDFG, bufferChannels);

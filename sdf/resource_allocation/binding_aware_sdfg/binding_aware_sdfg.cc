@@ -206,7 +206,7 @@ namespace SDF
     void BindingAwareSDFG::createMappedChannelToTileNSoC(TimedSDFchannel *c,
             Tile *t)
     {
-        SDFgraph *g;
+        SDFGraph *g;
         TimedSDFchannel *cMem;
 
         // Add channel from dst to src actor to model memory space
@@ -236,7 +236,7 @@ namespace SDF
         TimedSDFchannel *cSrc, *cDst;
         TimedSDFactor *c, *d, *e;
         Processor *dstP;
-        SDFgraph *g;
+        SDFGraph *g;
         double connectionDelay;
 
         // SDF graph
@@ -446,7 +446,7 @@ namespace SDF
     void BindingAwareSDFG::createMappedChannelToTileMPFlow(TimedSDFchannel *c,
             Tile *t)
     {
-        SDFgraph *g;
+        SDFGraph *g;
         TimedSDFchannel *cMem;
 
         // Add channel from dst to src actor to model memory space
@@ -515,7 +515,7 @@ namespace SDF
         TimedSDFchannel *chDstCommActor, *chTDMAsrcSrcActor;
         SDFport *srcPort, *dstPort;
         Processor *srcProc, *dstProc;
-        SDFgraph *g;
+        SDFGraph *g;
 
         // SDF graph
         g = ch->getGraph();

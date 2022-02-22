@@ -1,5 +1,9 @@
 find_package(LibXml2 REQUIRED)
 
+if(WIN32)
+    add_definitions(-D_ITERATION_DEBUG_LEVEL=0)
+endif()
+
 include_directories(${CMAKE_SOURCE_DIR} ${LIBXML2_INCLUDE_DIR})
 
 add_subdirectory(base)

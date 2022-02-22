@@ -157,7 +157,7 @@ void simpleCycleVisit(SDFactor *a, v_int &color, SDFactor **pi,
  * The function performs a depth first search on the graph to discover all
  * simple cycles in the graph
  */
-SDFgraphCycles findSimpleCycles(SDFgraph *g, bool transpose)
+SDFgraphCycles findSimpleCycles(SDFGraph *g, bool transpose)
 {
     SDFgraphCycles cycles;
     SDFactor **pi = new SDFactor* [g->nrActors()];
@@ -246,7 +246,7 @@ namespace SDF
      * simple cycles.
      */
     static
-    void simpleCycleVisit(uint a, SDFgraph *g, v_uint &nodeId, v_uint &actorId,
+    void simpleCycleVisit(uint a, SDFGraph *g, v_uint &nodeId, v_uint &actorId,
                           vector<v_uint> &graph, uint size, v_int &color, v_uint &pi,
                           SDFgraphCycles &cycles)
     {
@@ -294,7 +294,7 @@ namespace SDF
      * The function performs a depth first search on the graph to discover all
      * simple cycles in the graph
      */
-    SDFgraphCycles findSimpleCycles(SDFgraph *g, bool transpose)
+    SDFgraphCycles findSimpleCycles(SDFGraph *g, bool transpose)
     {
         SDFgraphCycles cycles;
         v_uint pi(g->nrActors());
@@ -359,7 +359,7 @@ namespace SDF
      * simple cycles.
      */
     static
-    void simpleCycleVisit(uint a, SDFgraph *g, v_uint &nodeId, v_uint &actorId,
+    void simpleCycleVisit(uint a, SDFGraph *g, v_uint &nodeId, v_uint &actorId,
                           vector<v_uint> &graph, uint size, v_int &color, v_uint &pi,
                           SDFgraphCycle &cycle)
     {
@@ -406,7 +406,7 @@ namespace SDF
      * The function performs a depth first search on the graph to discover a
      * simple cycles in the graph. The first cycle found is returned.
      */
-    SDFgraphCycle findSimpleCycle(SDFgraph *g, bool transpose)
+    SDFgraphCycle findSimpleCycle(SDFGraph *g, bool transpose)
     {
         SDFgraphCycle cycle;
         v_uint pi(g->nrActors());

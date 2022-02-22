@@ -42,24 +42,24 @@ namespace SDF
 
 
     /**
-     * SDFgraph
+     * SDFGraph
      * Container for SDF graph.
      */
-    class SDFgraph : public SDFcomponent
+    class SDFGraph : public SDFcomponent
     {
         public:
 
             // Constructor
-            SDFgraph(SDFcomponent &c);
-            SDFgraph();
+            explicit SDFGraph(SDFcomponent &c);
+            SDFGraph();
 
             // Destructor
-            virtual ~SDFgraph();
+            ~SDFGraph() override;
 
             // Construct
-            virtual SDFgraph *create(SDFcomponent &c) const;
-            virtual SDFgraph *createCopy(SDFcomponent &c) const;
-            virtual SDFgraph *clone(SDFcomponent &c) const;
+            virtual SDFGraph *create(SDFcomponent &c) const;
+            virtual SDFGraph *createCopy(SDFcomponent &c) const;
+            virtual SDFGraph *clone(SDFcomponent &c) const;
             void construct(const CNodePtr sdfNode);
 
             // Type
@@ -135,7 +135,7 @@ namespace SDF
 
             // Print
             ostream &print(ostream &out);
-            friend ostream &operator<<(ostream &out, SDFgraph &g)
+            friend ostream &operator<<(ostream &out, SDFGraph &g)
             {
                 return g.print(out);
             };
@@ -150,7 +150,7 @@ namespace SDF
 
     };
 
-    typedef list<SDFgraph *>             SDFgraphs;
+    typedef list<SDFGraph *>            SDFgraphs;
     typedef SDFgraphs::iterator         SDFgraphsIter;
     typedef SDFgraphs::const_iterator   SDFgraphsCIter;
 

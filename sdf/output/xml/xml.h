@@ -51,7 +51,7 @@ namespace SDF
      * outputSDFasXML ()
      * The function outputs a SDF graph in XML format.
      */
-    void outputSDFasXML(SDFgraph *g, ostream &out);
+    void outputSDFasXML(SDFGraph *g, ostream &out);
     void outputSDFasXML(TimedSDFgraph *g, ostream &out);
 
 }//namespace SDF

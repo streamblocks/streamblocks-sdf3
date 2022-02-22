@@ -46,7 +46,7 @@ namespace SDF
      * TimedSDFgraph
      * Container for timed SDF graph.
      */
-    class TimedSDFgraph : public SDFgraph
+    class TimedSDFgraph : public SDFGraph
     {
         public:
 

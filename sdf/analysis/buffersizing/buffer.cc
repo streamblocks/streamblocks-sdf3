@@ -1204,7 +1204,8 @@ namespace SDF
 
         // Explore all storage distributions contained in the set
         d = ds->distributions;
-        while (d != nullptr)
+        bool t = true;
+        while (d != nullptr && t)
         {
             // Explore distribution d
             exploreStorageDistribution(ds, d);

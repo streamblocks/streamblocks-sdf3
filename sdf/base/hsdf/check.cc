@@ -42,7 +42,7 @@ namespace SDF
      * isHSDFgraph ()
      * The function checks wether a SDF graph is a HSDF graph.
      */
-    bool isHSDFgraph(SDFgraph *g)
+    bool isHSDFgraph(SDFGraph *g)
     {
         // Check all actors
         for (SDFactorsIter iter = g->actorsBegin(); iter != g->actorsEnd(); iter++)

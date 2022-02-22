@@ -53,7 +53,7 @@ namespace SDF
             ~SDFstateSpaceDeadlockAnalysis() {};
 
             // Analyze absense of deadlock of the graph
-            bool isDeadlockFree(SDFgraph *g);
+            bool isDeadlockFree(SDFGraph *g);
 
         private:
 
@@ -103,7 +103,7 @@ namespace SDF
                     typedef States::iterator StatesIter;
 
                     // Constructor
-                    TransitionSystem(SDFgraph *gr)
+                    TransitionSystem(SDFGraph *gr)
                     {
                         g = gr;
                     };
@@ -120,7 +120,7 @@ namespace SDF
                     void fireActor(SDFactor *a);
 
                     // SDF graph and output actor
-                    SDFgraph *g;
+                    SDFGraph *g;
 
                     // Current state
                     State initialState;
