@@ -27,6 +27,7 @@ cmake ..
 make
 ```
 
+The executables are listed under the `build/bin/` folder.
 ------------------------------------------------------------------
 
 ### Which software dependencies does SDF3 have?
