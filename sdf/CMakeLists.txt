@@ -1,4 +1,9 @@
+
+# sdf3 requires libxml2
 find_package(LibXml2 REQUIRED)
+
+# sdf3 requires libboost-regex-dev
+find_package( Boost REQUIRED COMPONENTS regex)
 
 if(WIN32)
     add_definitions(-D_ITERATION_DEBUG_LEVEL=0)
