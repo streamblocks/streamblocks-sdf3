@@ -230,6 +230,12 @@ namespace SDF
             // Destructor
             ~APGgraph();
 
+            // Id
+            CId getId() const
+            {
+                return id;
+            };
+
             // Nodes (management)
             uint nrNodes() const
             {

@@ -5,6 +5,7 @@
  *  Name            :   dot.h
  *
  *  Author          :   Sander Stuijk (sander@ics.ele.tue.nl)
+ *                      Endri Bezati (endri.bezati@gmail.com)
  *
  *  Date            :   July 22, 2005
  *
@@ -37,6 +38,8 @@
 #define SDF_OUTPUT_DOT_DOT_H_INCLUDED
 
 #include "../../base/untimed/graph.h"
+#include "sdf/transform/to_apg/apg.h"
+
 namespace SDF
 {
 
@@ -46,6 +49,13 @@ namespace SDF
      * The function outputs a SDF graph in DOT format.
      */
     void outputSDFasDot(SDFGraph *g, ostream &out);
+
+    /**
+    * outputAPGasDot ()
+    * The function outputs a APG graph in DOT format.
+    */
+    void outputAPGasDot(APGgraph *g, ostream &out);
+
 
 }//namespace SDF
 #endif

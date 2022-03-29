@@ -73,6 +73,7 @@ namespace SDF
         out << "#include <math.h>" << endl;
         out << "#include <iostream>" << endl;
         out << "#include <assert.h>" << endl;
+        out << "#include <string.h>" << endl;
 
         out << "" << endl;
         out << "using std::ostream;" << endl;

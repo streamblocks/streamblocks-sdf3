@@ -5,6 +5,7 @@
  *  Name            :   dot.cc
  *
  *  Author          :   Sander Stuijk (sander@ics.ele.tue.nl)
+ *                      Endri Bezati (endri.bezati@gmail.com)
  *
  *  Date            :   July 22, 2005
  *
@@ -112,6 +113,39 @@ namespace SDF
                 out << srcP->getRate() << "\", headlabel=\"";
                 out << dstP->getRate() << "\" ];" << endl;
             }
+        }
+
+        out << "}" << endl;
+    }
+    /**
+   * outputAPGasDot ()
+   * The function outputs a APG graph in DOT format.
+   */
+    void outputAPGasDot(APGgraph *g, ostream &out)
+    {
+        out << "digraph " << g->getId() << " {" << endl;
+        out << "    size=\"7,10\";" << endl;
+
+        // Output all nodes
+        for(APGnodesIter iter = g->nodesBegin(); iter !=g->nodesEnd(); iter++)
+        {
+            APGnode *n = *iter;
+
+            out << "    " << n->getId() << " [ label=\"" << n->getId();
+            out << "\" ];" << endl;
+        }
+
+        // Output all edges
+        for(APGedgesIter iter = g->edgesBegin(); iter !=g->edgesEnd(); iter++)
+        {
+            APGedge *e = *iter;
+
+            APGnode *src = e->getSrc();
+            APGnode *dst = e->getDst();
+
+            out << "    " << src->getId() << " -> " << dst->getId();
+            out << " [ label=\"" << e->getId() << "\"" << "];" << endl;
+
         }
 
         out << "}" << endl;

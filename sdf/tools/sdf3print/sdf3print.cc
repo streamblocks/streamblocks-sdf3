@@ -99,6 +99,7 @@ namespace SDF
         out << "   --graph  <file>     input SDF graph" << endl;
         out << "   --output <file>     output file (default: stdout)" << endl;
         out << "   --format <type>     output format:" << endl;
+        out << "       apg(<unfold_count>)                       " << endl;
         out << "       hapi                                      " << endl;
         out << "       dot                                       " << endl;
         out << "       txt                                       " << endl;
@@ -230,7 +231,7 @@ namespace SDF
 
         // Open file
         appGraphDoc = CParseFile(file);
-        if (appGraphDoc == NULL)
+        if (appGraphDoc == nullptr)
             throw CException("Failed loading application from '" + file + "'.");
 
         // Locate the sdf3 root element and check module type
@@ -243,7 +244,7 @@ namespace SDF
 
         // Get application graph node
         appGraphNode = CGetChildNode(sdf3Node, "applicationGraph");
-        if (appGraphNode == NULL)
+        if (appGraphNode == nullptr)
             throw CException("No application graph in '" + file + "'.");
 
         return appGraphNode;
@@ -261,7 +262,7 @@ namespace SDF
 
         // Open file
         archGraphDoc = CParseFile(file);
-        if (archGraphDoc == NULL)
+        if (archGraphDoc == nullptr)
             throw CException("Failed loading application from '" + file + "'.");
 
         // Locate the sdf3 root element and check module type
@@ -290,7 +291,7 @@ namespace SDF
 
         // Open file
         mappingDoc = CParseFile(file);
-        if (mappingDoc == NULL)
+        if (mappingDoc == nullptr)
             throw CException("Failed loading application from '" + file + "'.");
 
         // Locate the sdf3 root element and check module type
@@ -319,7 +320,7 @@ namespace SDF
 
         // Open file
         usageDoc = CParseFile(file);
-        if (usageDoc == NULL)
+        if (usageDoc == nullptr)
             throw CException("Failed loading usage from '" + file + "'.");
 
         // Locate the sdf3 root element and check module type
@@ -348,7 +349,7 @@ namespace SDF
 
         // Open file
         messagesSetDoc = CParseFile(file);
-        if (messagesSetDoc == NULL)
+        if (messagesSetDoc == nullptr)
             throw CException("Failed loading usage from '" + file + "'.");
 
         // Locate the sdf3 root element and check module type
@@ -405,7 +406,23 @@ namespace SDF
      */
     void printSDFG(TimedSDFgraph *g, CPairs &format, ostream &out)
     {
-        if (format.front().key == "dot")
+        if (format.front().key == "apg") {
+            int unfold_factor = 1;
+            if (format.front().value == "")
+                unfold_factor = 1;
+            else
+                unfold_factor = format.front().value;
+
+            // Transform SDF to HSDF
+            TimedSDFgraph *h = (TimedSDFgraph *)transformSDFtoHSDF(g);
+
+            // Transform HSDF unto APG
+            APGgraph *apg = transformHSDFtoAPG(h, unfold_factor);
+
+            outputAPGasDot(apg, out);
+
+        }
+        else if (format.front().key == "dot")
         {
             outputSDFasDot(g, out);
         }
@@ -516,7 +533,7 @@ namespace SDF
 
         // Find sdf graph in XML structure
         sdfNode = CGetChildNode(settings.xmlAppGraph, "sdf");
-        if (sdfNode == NULL)
+        if (sdfNode == nullptr)
             throw CException("Invalid xml file - missing 'sdf' node");
         sdfPropertiesNode = CGetChildNode(settings.xmlAppGraph, "sdfProperties");
 
