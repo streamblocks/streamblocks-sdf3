@@ -3,15 +3,15 @@
     <settings type="generate">
         <graph>
             <actors nr="10"/>
-            <degree avg="3" var="1" min="2" max="4" repetitionVectorSum="30"/>
-            <rate avg="3" var="1" min="1" max="5"/>
+            <degree avg="1" var="2" min="1" max="3" repetitionVectorSum="10"/>
+            <rate avg="1" var="1" min="1" max="1"/>
             <initialTokens prop="0"/>
-            <structure stronglyConnected="false" acyclic="true" />
+            <structure stronglyConnected="false" acyclic="false" />
         </graph>
         <graphProperties>
             <procs nrTypes="1" mapChance=".1"/>
             <execTime avg="1" var="1" min="1" max="1"/>
-            <tokenSize avg="10" var="23" min="1" max="30"/>
+            <tokenSize avg="10000" var="23000" min="1000000" max="30000000"/>
             <bufferSize/>
             <bandwidthRequirement avg="4" var="2" min="0" max="7"/>
             <latencyRequirement avg="2" var="0" min="1" max="4"/>
