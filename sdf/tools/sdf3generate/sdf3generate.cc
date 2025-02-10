@@ -478,7 +478,7 @@ namespace SDF
                                      settings.acyclic, settings.stronglyConnected,
                                      settings.initialTokenProp, settings.repetitionVectorSum,
                                      settings.multigraph);
-
+/*
         generateSDFgraphProperties(sdfGraph,
                                    settings.execTime, settings.nrProcTypes,
                                    settings.mapChance, settings.avgExecTime,
@@ -496,7 +496,7 @@ namespace SDF
                                    settings.latencyRequirement, settings.avgLatency,
                                    settings.varLatency, settings.minLatency,
                                    settings.maxLatency, settings.integerMCM);
-
+*/
         outputSDFasXML(sdfGraph, out);
     }
 }//namespace SDF

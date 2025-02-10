@@ -241,8 +241,8 @@ namespace SDF
         out << "    Y:      " << settings.dimY << endl;
         out << "-->" << endl;
         out << "<sdf3 type='sdf' version='1.0'" << endl;
-        out << "     xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'" << endl;
-        out << "      xsi:noNamespaceSchemaLocation='http://www.es.ele.tue.nl/sdf3/xsd/sdf3-sdf.xsd'>" << endl;
+        out << "     " << endl;
+        out << "      >" << endl;
         out << "  <architectureGraph name='random_graph'>" << endl;
 
 

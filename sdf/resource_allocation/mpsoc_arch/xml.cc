@@ -216,11 +216,12 @@ namespace SDF
         CNode *sdf3Node = CNewNode("sdf3");
         CAddAttribute(sdf3Node, "version", "1.0");
         CAddAttribute(sdf3Node, "type", "sdf");
+        /*
         CAddAttribute(sdf3Node, "xmlns:xsi",
                       "http://www.w3.org/2001/XMLSchema-instance");
         CAddAttribute(sdf3Node, "xsi:noNamespaceSchemaLocation",
                       "http://www.es.ele.tue.nl/sdf3/xsd/sdf3-sdf.xsd");
-
+        */
         // Mapping node
         CAddNode(sdf3Node, createMappingNode(g, appGraph));
 
@@ -311,10 +312,7 @@ namespace SDF
         CNode *sdf3Node = CNewNode("sdf3");
         CAddAttribute(sdf3Node, "version", "1.0");
         CAddAttribute(sdf3Node, "type", "sdf");
-        CAddAttribute(sdf3Node, "xmlns:xsi",
-                      "http://www.w3.org/2001/XMLSchema-instance");
-        CAddAttribute(sdf3Node, "xsi:noNamespaceSchemaLocation",
-                      "http://www.es.ele.tue.nl/sdf3/xsd/sdf3-sdf.xsd");
+        
 
         // System usage node
         CAddNode(sdf3Node, createSystemUsageNode(g));
@@ -434,10 +432,7 @@ namespace SDF
         CNode *sdf3Node = CNewNode("sdf3");
         CAddAttribute(sdf3Node, "version", "1.0");
         CAddAttribute(sdf3Node, "type", "sdf");
-        CAddAttribute(sdf3Node, "xmlns:xsi",
-                      "http://www.w3.org/2001/XMLSchema-instance");
-        CAddAttribute(sdf3Node, "xsi:noNamespaceSchemaLocation",
-                      "http://www.es.ele.tue.nl/sdf3/xsd/sdf3-sdf.xsd");
+       
 
         // Architecture graph node
         CAddNode(sdf3Node, createPlatformGraphNode(g));

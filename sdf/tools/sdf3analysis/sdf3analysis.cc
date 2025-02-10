@@ -590,7 +590,7 @@ namespace SDF
             out << "<?xml version='1.0' encoding='UTF-8'?>" << endl;
             out << "<sdf3 type='sdf' version='1.0'" << endl;
             out << "     xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'" << endl;
-            out << "      xsi:noNamespaceSchemaLocation='http://www.es.ele.tue.nl/sdf3/xsd/sdf3-sdf.xsd'>" << endl;
+            out << "      >" << endl;
             out << "    <storageThroughputTradeOffs>" << endl;
 
             for (StorageDistributionSet *p = minStorageDistributions; p != nullptr;
@@ -761,9 +761,9 @@ namespace SDF
             // Output all minimal storage distributions
             out << "<?xml version='1.0' encoding='UTF-8'?>" << endl;
             out << "<sdf3 type='sdf' version='1.0'" << endl;
-            out << "     xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'";
+            out << "     ";
             out << endl;
-            out << "     xsi:noNamespaceSchemaLocation='http://www.es.ele.tue.nl/sdf3/xsd/sdf3-sdf.xsd'>" << endl;
+            out << "     >" << endl;
             out << "    <storageThroughputTradeOffs>" << endl;
 
             for (StorageDistributionSet *p = minStorageDistributions; p != nullptr;
